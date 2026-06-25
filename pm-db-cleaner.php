@@ -30,7 +30,7 @@ $updateChecker = YahnisElsts\PluginUpdateChecker\v5p7\PucFactory::buildUpdateChe
 
 
 $updateChecker->setBranch('main');
-$updateChecker->setAuthentication('xxx');
+$updateChecker->setAuthentication('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');
 
 $updateChecker->addResultFilter(function($info) {
 $info->icons = [
