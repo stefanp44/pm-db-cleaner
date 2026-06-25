@@ -1,0 +1,116 @@
+/* PM DB Cleaner — Admin CSS */
+
+/* ─── Layout général ─────────────────────────────────────────────────────── */
+.pm-db-cleaner-wrap{max-width:100%}
+.pm-db-cleaner-wrap h1{display:flex;align-items:center;gap:12px;font-size:28px;margin-bottom:30px}
+.pm-db-cleaner-wrap h1 .dashicons{font-size:32px;width:32px;height:32px}
+
+/* ─── Header : toggle nettoyage + branding ───────────────────────────────── */
+.pm-header-grid{display:grid;grid-template-columns:75% 1fr;gap:20px;margin-bottom:30px;align-items:start}
+.pm-header-branding{display:flex;align-items:center;justify-content:flex-end}
+.pm-author-compact{background:linear-gradient(135deg,#289dcc 0%,#B11F8F 100%);color:#fff;border-radius:8px;padding:12px 18px;text-align:center;font-size:12px;line-height:1.3;box-shadow:0 2px 4px rgba(0,0,0,0.1);white-space:nowrap}
+.pm-author-compact a{color:#fff;text-decoration:none;transition:opacity 0.2s}
+.pm-author-compact a:hover{opacity:0.85}
+.pm-author-compact strong{font-size:13px}
+
+/* ─── Grille milieu : nettoyage (2/3) + autoload (1/3) ──────────────────── */
+.pm-main-grid{display:grid;grid-template-columns:2fr 1fr;gap:15px;margin-bottom:15px;align-items:start}
+
+/* ─── Grille bas : 2 colonnes 50/50 ─────────────────────────────────────── */
+.pm-two-col{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:15px}
+
+/* ─── Panneaux génériques ────────────────────────────────────────────────── */
+.pm-settings-section{background:#fff;border:1px solid #dcdcde;border-radius:8px;padding:20px;margin-bottom:15px;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.pm-pane{background:#fff;border:1px solid #dcdcde;border-radius:8px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.pm-pane-title{font-size:18px;font-weight:600;color:#1d2327;margin:0 0 15px;overflow:hidden}
+
+/* ─── Tableau de nettoyage ───────────────────────────────────────────────── */
+.pm-cleanup-table{width:100%;border-collapse:collapse}
+.pm-cleanup-table td{padding:12px;border-bottom:1px solid #f0f0f1}
+.pm-cleanup-table tr:hover{background:#f6f7f7}
+.pm-cleanup-table tr:last-child td{border-bottom:none}
+.pm-category-row{background:#f0f6fc;border-top:2px solid #289dcc}
+.pm-category-row td{padding:10px 12px;font-size:13px;color:#2271b1;font-weight:600;border-bottom:1px solid #c3ddfc}
+.pm-category-row:hover{background:#f0f6fc}
+.pm-cleanup-item{font-size:14px;color:#1d2327;font-weight:500}
+
+/* ─── Compteurs ──────────────────────────────────────────────────────────── */
+.pm-count{display:inline-block;background:#289dcc;color:#fff;padding:2px 8px;border-radius:3px;font-size:12px;font-weight:600;min-width:30px;text-align:center}
+.pm-count.zero{background:#dcdcde;color:#646970}
+.pm-info-count{display:inline-block;background:#646970;color:#fff;padding:2px 8px;border-radius:3px;font-size:12px;font-weight:600;min-width:30px;text-align:center}
+
+/* ─── Boutons ────────────────────────────────────────────────────────────── */
+.pm-btn{background:#289dcc;color:#fff;border:none;padding:6px 16px;font-size:13px;cursor:pointer;border-radius:3px;white-space:nowrap;transition:all 0.2s}
+.pm-btn:hover{background:#B11F8F}
+.pm-btn:disabled{background:#dcdcde;cursor:not-allowed;color:#a7aaad}
+.pm-btn-all{background:#289dcc;padding:10px 24px;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.pm-btn-all:hover{background:#B11F8F}
+.pm-btn-all .dashicons{font-size:18px;width:18px;height:18px}
+.pm-btn-danger{background:#B11F8F;color:#fff}
+.pm-btn-danger:hover{background:#289dcc}
+.pm-btn-danger:disabled{background:#dcdcde;color:#a7aaad;cursor:not-allowed}
+.pm-btn-autoload{background:#f0ad4e;color:#fff}
+.pm-btn-autoload:hover{background:#d4891a}
+.pm-btn-autoload:disabled{background:#dcdcde;color:#a7aaad;cursor:not-allowed}
+
+/* ─── Lignes informatives (lecture seule) ────────────────────────────────── */
+.pm-info-row td{background:#fafafa;color:#646970}
+.pm-info-tip{display:inline-block;margin-left:8px;font-size:11px;color:#646970;font-style:italic}
+.pm-info-tip a{color:#289dcc;text-decoration:none}
+.pm-info-tip a:hover{text-decoration:underline}
+
+/* ─── Toggle collapsible (nettoyage automatique) ─────────────────────────── */
+.pm-collapsible{border:1px solid #c3ddfc;border-radius:6px;background:#f0f6fc}
+.pm-collapsible-success{background:#edfaef;border-color:#b8e6bf}
+.pm-collapsible summary{padding:12px 15px;cursor:pointer;user-select:none;display:flex;align-items:center;gap:8px;font-size:14px;list-style:none;transition:background 0.2s}
+.pm-collapsible summary::-webkit-details-marker{display:none}
+.pm-collapsible summary::before{content:"▶";font-size:10px;transition:transform 0.2s;display:inline-block;margin-right:4px;color:#2271b1}
+.pm-collapsible-success summary::before{color:#1e8c3b}
+.pm-collapsible[open] summary::before{transform:rotate(90deg)}
+.pm-collapsible summary:hover{background:rgba(0,0,0,0.03)}
+.pm-collapsible summary .dashicons{font-size:16px;width:16px;height:16px;color:#0783be}
+.pm-collapsible-success summary .dashicons{color:#1e8c3b}
+.pm-collapsible-content{padding:12px 15px 15px;border-top:1px solid rgba(0,0,0,0.1);font-size:13px;line-height:1.6;color:#1d2327}
+.pm-collapsible-content ul{list-style-type:disc;margin:0;padding-left:20px;font-size:15px;line-height:1.7}
+.pm-collapsible-content ul ul{list-style-type:circle;margin-top:5px;padding-left:20px;font-size:14px}
+.pm-collapsible-content ul ul li{font-style:italic}
+
+/* ─── Listes à cases à cocher (postmeta / wp_options / cron) ────────────── */
+.pm-cf-wrap{padding:12px 0}
+.pm-cf-radio-group{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.pm-cf-radio-group label{display:flex;align-items:center;gap:5px;cursor:pointer;font-size:13px}
+.pm-filter-input{width:100%;max-width:400px;padding:6px 10px;border:1px solid #dcdcde;border-radius:3px;font-size:13px;margin-bottom:12px}
+.pm-keys-wrap{max-height:350px;overflow-y:auto;border:1px solid #dcdcde;border-radius:3px;padding:8px;background:#fafafa;margin-bottom:12px;scrollbar-width:thick;scrollbar-color:#289dcc #f0f6fc}
+.pm-keys-wrap::-webkit-scrollbar-track{background:#f0f6fc;border-radius:3px}
+.pm-keys-wrap::-webkit-scrollbar-thumb{background:#289dcc;border-radius:3px}
+.pm-keys-wrap::-webkit-scrollbar-thumb:hover{background:#B11F8F}
+.pm-key-label{display:flex;align-items:center;gap:8px;padding:5px 6px;cursor:pointer;font-size:13px;border-radius:3px;font-family:monospace}
+.pm-key-label:hover{background:#f0f6fc}
+/* Cases à cocher bleues PM — override WordPress admin */
+.pm-key-label input[type="checkbox"]{accent-color:#289dcc;flex-shrink:0}
+.pm-key-label input[type="checkbox"]:checked{background:#289dcc !important;border-color:#289dcc !important}
+.pm-key-label input[type="checkbox"]:focus{border-color:#289dcc !important;box-shadow:0 0 0 2px #fff,0 0 0 4px #289dcc !important}
+.pm-key-size{margin-left:auto;color:#646970;font-size:12px;white-space:nowrap}
+
+/* ─── Boîtes de confirmation ─────────────────────────────────────────────── */
+.pm-confirm-box{background:#fff3cd;border:1px solid #ffc107;border-radius:4px;padding:12px 15px;margin-top:12px;margin-bottom:12px}
+.pm-confirm-box label{display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:13px;line-height:1.5}
+.pm-confirm-box input[type="checkbox"]{margin-top:2px;flex-shrink:0;accent-color:#289dcc}
+.pm-confirm-box input[type="checkbox"]:checked{background:#289dcc !important;border-color:#289dcc !important}
+/* Variante danger (rouge/orange) — WP Options */
+.pm-confirm-box-danger{background:#fef0f0;border-color:#dc3232}
+
+/* ─── Autoload ───────────────────────────────────────────────────────────── */
+.pm-autoload-box{background:#f0f6fc;border:1px solid #c3ddfc;border-radius:4px;padding:12px 15px;margin-bottom:15px}
+.pm-autoload-stats{display:flex;gap:24px;margin-bottom:12px;flex-wrap:wrap}
+.pm-autoload-stat{font-size:13px}
+.pm-autoload-stat strong{color:#289dcc;font-size:16px;display:block}
+.pm-keys-wrap--short{max-height:220px}
+
+/* ─── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width:1200px){
+.pm-header-grid{grid-template-columns:1fr;gap:15px}
+.pm-header-branding{justify-content:flex-start}
+.pm-main-grid{grid-template-columns:1fr}
+.pm-two-col{grid-template-columns:1fr}
+}
