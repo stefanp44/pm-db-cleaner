@@ -1,0 +1,51 @@
+
+# Configuration locale — token GitHub (ne jamais commiter)
+update-checker-config.php
+
+# Windows
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Nextcloud
+.sync
+.nextcloud
+*_conflict-*
+
+# Éditeurs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+
+# PHP
+*.log
+
+# WordPress
+wp-config.php
+
+# Anciennes versions
+Old/
+old/
+Archives/
+archives/
+_old/
+_archives/
+
+# Fichiers de test
+test/
+tests/
+
+# Zips — GitHub génère les siens à chaque Release
+*.zip
+
+# Node (si outil de build un jour)
+node_modules/
+npm-debug.log*

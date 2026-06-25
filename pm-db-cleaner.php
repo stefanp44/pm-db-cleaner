@@ -21,21 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // ─── Plugin Update Checker ────────────────────────────────────────────────────
-require_once plugin_dir_path( __FILE__ ) . 'plugin-update-checker/load-v5p7.php';
-$updateChecker = YahnisElsts\PluginUpdateChecker\v5p7\PucFactory::buildUpdateChecker(
-	'https://github.com/stefanp44/pm-db-cleaner/',
-	__FILE__,
-	'pm-db-cleaner'
-);
-$updateChecker->setBranch( 'main' );
-$updateChecker->setAuthentication( 'xxx' );
-$updateChecker->addResultFilter( function( $info ) {
-	$info->icons = array(
-		'1x' => 'https://raw.githubusercontent.com/stefanp44/pm-assets/main/pm-db-cleaner/icon-128x128.png',
-		'2x' => 'https://raw.githubusercontent.com/stefanp44/pm-assets/main/pm-db-cleaner/icon-256x256.png',
-	);
-	return $info;
-} );
+require_once plugin_dir_path( __FILE__ ) . 'update-checker-config.php';
 
 // ─── Hooks d'activation / désactivation ──────────────────────────────────────
 
