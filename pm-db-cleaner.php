@@ -2,7 +2,7 @@
 /**
  * Plugin Name: PM DB Cleaner
  * Description: Nettoie automatiquement la base de données WordPress : métadonnées orphelines et dupliquées, caches oEmbed, commentaires en corbeille, transients expirés, Action Scheduler, variations WooCommerce orphelines, custom fields, options wp_options et autoload inutilisés, et tâches Cron orphelines. Nettoyages quotidiens/hebdomadaires/mensuels programmés avec logs traçables et limitation anti-timeout.
- * Version: 2026-06-25
+ * Version: 1.3
  * Author: Perspectives Marketing
  * Author URI: https://perspectives.marketing
  * Update URI: https://github.com/perspectives-marketing/pm-db-cleaner
