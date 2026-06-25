@@ -54,8 +54,15 @@
 .pm-btn-autoload:disabled{background:#dcdcde;color:#a7aaad;cursor:not-allowed}
 
 /* ─── Description secondaire dans une ligne de tableau ──────────────────── */
-.pm-item-desc{display:block;font-size:12px;font-weight:400;color:#646970;margin-top:3px}
+.pm-item-desc{display:block;font-size:14px;font-weight:400;color:#646970;margin-top:3px}
 .pm-readonly{font-size:11px;color:#646970}
+/* Texte descriptif sous un titre de panneau */
+.pm-pane-desc{font-size:14px;color:#646970;margin:0 0 10px}
+.pm-pane-desc--top{margin-top:10px}
+/* Lien téléchargement log */
+.pm-log-dl{margin:10px 0 0;font-size:12px}
+/* Titre de panneau danger (suppression SFTP) */
+.pm-pane-title--danger{color:#dc3232}
 /* Pane avec espacement top (remplace margin-top inline) */
 .pm-pane--top{margin-top:15px}
 

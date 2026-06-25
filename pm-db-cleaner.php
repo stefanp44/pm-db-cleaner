@@ -2,7 +2,7 @@
 /**
  * Plugin Name: PM DB Cleaner
  * Description: Nettoie automatiquement la base de données WordPress : métadonnées orphelines et dupliquées, caches oEmbed, commentaires en corbeille, transients expirés, Action Scheduler, variations WooCommerce orphelines, custom fields, options wp_options et autoload inutilisés, et tâches Cron orphelines. Nettoyages quotidiens/hebdomadaires/mensuels programmés avec logs traçables et limitation anti-timeout.
- * Version: 1.2
+ * Version: 2026-06-25
  * Author: Perspectives Marketing
  * Author URI: https://perspectives.marketing
  * Update URI: https://github.com/perspectives-marketing/pm-db-cleaner
@@ -21,7 +21,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // ─── Plugin Update Checker ────────────────────────────────────────────────────
-require_once plugin_dir_path( __FILE__ ) . 'update-checker-config.php';
+require_once plugin_dir_path( __FILE__ ) . 'plugin-update-checker/load-v5p7.php';
+$updateChecker = YahnisElsts\PluginUpdateChecker\v5p7\PucFactory::buildUpdateChecker(
+	'https://github.com/stefanp44/pm-db-cleaner/',
+	__FILE__,
+	'pm-db-cleaner'
+);
+$updateChecker->setBranch( 'main' );
+$updateChecker->setAuthentication( 'xxx' );
+$updateChecker->addResultFilter( function( $info ) {
+	$info->icons = array(
+		'1x' => 'https://raw.githubusercontent.com/stefanp44/pm-assets/main/pm-db-cleaner/icon-128x128.png',
+		'2x' => 'https://raw.githubusercontent.com/stefanp44/pm-assets/main/pm-db-cleaner/icon-256x256.png',
+	);
+	return $info;
+} );
 
 // ─── Hooks d'activation / désactivation ──────────────────────────────────────
 
@@ -508,8 +522,8 @@ class PM_DB_Cleaner {
 		if ( 'tools_page_pm-db-cleaner' !== $hook ) { return; }
 
 		$base = plugin_dir_url( __FILE__ ) . 'assets/';
-		wp_enqueue_style( 'pm-db-cleaner', $base . 'admin.css', array(), '1.2' );
-		wp_enqueue_script( 'pm-db-cleaner', $base . 'admin.js', array( 'jquery' ), '1.2', true );
+		wp_enqueue_style( 'pm-db-cleaner', $base . 'admin.css', array(), '1.3' );
+		wp_enqueue_script( 'pm-db-cleaner', $base . 'admin.js', array( 'jquery' ), '1.3', true );
 		wp_localize_script( 'pm-db-cleaner', 'pmDBCleaner', array(
 			'nonce'      => wp_create_nonce( 'pm_db_cleanup' ),
 			'processing' => 'Nettoyage...',
@@ -553,7 +567,7 @@ class PM_DB_Cleaner {
 								<ul><li>Prochain : <strong><?php echo $monthly_next ? $this->format_cron_time( $monthly_next ) : 'Non planifié'; ?></strong></li></ul>
 							</li>
 						</ul>
-						<p style="margin-top:10px;font-size:12px;color:#646970">
+						<p class="pm-pane-desc pm-pane-desc--top">
 							<strong>Non automatisé — manuel uniquement :</strong> Métadonnées (postmeta), WP Options, Autoload, Overhead BDD.
 						</p>
 						<?php if ( is_multisite() ) : ?>
@@ -838,12 +852,12 @@ class PM_DB_Cleaner {
 						Tâches Cron orphelines
 						<button id="pm-cron-toggle" class="pm-btn" style="float:right"><?php echo count( $cron_orphans ); ?> détectée(s) — afficher</button>
 					</div>
-					<p style="font-size:12px;color:#646970;margin:0 0 8px">
+					<p class="pm-pane-desc">
 						Hooks planifiés sans callback enregistré (<code>has_action()</code> vide) — résidus d'un plugin désinstallé. Détection au chargement de la page (comme WP Crontrol) pour éviter les faux positifs.
 					</p>
 					<div id="pm-cron-results" style="display:none;margin-top:12px">
 						<?php if ( empty( $cron_orphans ) ) : ?>
-							<p style="font-size:13px;color:#646970;padding:6px">Aucune tâche cron orpheline détectée.</p>
+							<p class="pm-pane-desc">Aucune tâche cron orpheline détectée.</p>
 						<?php else : ?>
 							<div class="pm-keys-wrap">
 								<div id="pm-cron-list">
@@ -869,8 +883,8 @@ class PM_DB_Cleaner {
 
 				<!-- Désinstallation manuelle SFTP/SSH -->
 				<div class="pm-pane">
-					<div class="pm-pane-title">Supprimer le plugin via SFTP/SSH ?</div>
-					<p style="font-size:12px;color:#646970;margin:0 0 12px">
+					<div class="pm-pane-title pm-pane-title--danger">Supprimer le plugin via SFTP/SSH ?</div>
+					<p class="pm-pane-desc">
 						<strong>Désactivation via Extensions &gt; Désactiver</strong> → les 3 tâches cron sont supprimées automatiquement, rien à faire ici.<br><br>
 						<strong>Suppression directe via SFTP/SSH</strong> sans désactivation WordPress → cliquez ci-dessous <strong>avant</strong> de supprimer le fichier pour éviter que ces tâches restent orphelines indéfiniment.
 					</p>
