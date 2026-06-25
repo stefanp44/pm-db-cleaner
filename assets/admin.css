@@ -53,6 +53,12 @@
 .pm-btn-autoload:hover{background:#d4891a}
 .pm-btn-autoload:disabled{background:#dcdcde;color:#a7aaad;cursor:not-allowed}
 
+/* ─── Description secondaire dans une ligne de tableau ──────────────────── */
+.pm-item-desc{display:block;font-size:12px;font-weight:400;color:#646970;margin-top:3px}
+.pm-readonly{font-size:11px;color:#646970}
+/* Pane avec espacement top (remplace margin-top inline) */
+.pm-pane--top{margin-top:15px}
+
 /* ─── Lignes informatives (lecture seule) ────────────────────────────────── */
 .pm-info-row td{background:#fafafa;color:#646970}
 .pm-info-tip{display:inline-block;margin-left:8px;font-size:11px;color:#646970;font-style:italic}

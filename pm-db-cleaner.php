@@ -20,25 +20,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
 
-require_once plugin_dir_path(__FILE__) . 'plugin-update-checker/load-v5p7.php';
-
+// ─── Plugin Update Checker ────────────────────────────────────────────────────
+require_once plugin_dir_path( __FILE__ ) . 'plugin-update-checker/load-v5p7.php';
 $updateChecker = YahnisElsts\PluginUpdateChecker\v5p7\PucFactory::buildUpdateChecker(
-    'https://github.com/stefanp44/pm-images/',
-    __FILE__,
-    'pm-images'
+	'https://github.com/stefanp44/pm-db-cleaner/',
+	__FILE__,
+	'pm-db-cleaner'
 );
-
-
-$updateChecker->setBranch('main');
-$updateChecker->setAuthentication('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');
-
-$updateChecker->addResultFilter(function($info) {
-$info->icons = [
-    '1x' => 'https://raw.githubusercontent.com/stefanp44/pm-assets/main/pm-images/icon-128x128.png',
-    '2x' => 'https://raw.githubusercontent.com/stefanp44/pm-assets/main/pm-images/icon-256x256.png',
-];
-    return $info;
-});
+$updateChecker->setBranch( 'main' );
+$updateChecker->setAuthentication( 'xxx' );
+$updateChecker->addResultFilter( function( $info ) {
+	$info->icons = array(
+		'1x' => 'https://raw.githubusercontent.com/stefanp44/pm-assets/main/pm-db-cleaner/icon-128x128.png',
+		'2x' => 'https://raw.githubusercontent.com/stefanp44/pm-assets/main/pm-db-cleaner/icon-256x256.png',
+	);
+	return $info;
+} );
 
 // ─── Hooks d'activation / désactivation ──────────────────────────────────────
 
@@ -742,23 +739,30 @@ class PM_DB_Cleaner {
 				</div>
 
 				<!-- Nettoyages manuels -->
-				<div class="pm-pane" style="margin-top:15px">
-					<div class="pm-pane-title" style="font-size:15px">Nettoyages manuels</div>
+				<div class="pm-pane pm-pane--top">
+					<div class="pm-pane-title">Nettoyages manuels</div>
 					<table class="pm-cleanup-table">
 						<tbody>
 							<tr>
-								<td class="pm-cleanup-item">Dirsize Cache — cache de la taille des dossiers <code>uploads</code>, se recrée automatiquement</td>
+								<td class="pm-cleanup-item">
+									Dirsize Cache<br>
+									<span class="pm-item-desc">Cache de la taille des dossiers <code>uploads</code>. Se recrée automatiquement à la prochaine visite de la médiathèque. Sans risque.</span>
+								</td>
 								<td style="text-align:center;width:60px"><span class="pm-count<?php echo $stats['dirsize_cache'] == 0 ? ' zero' : ''; ?>"><?php echo number_format_i18n( $stats['dirsize_cache'] ); ?></span></td>
 								<td style="text-align:center;width:90px"><button class="pm-btn pm-cleanup-btn" data-action="pm_cleanup_dirsize_cache" <?php echo $stats['dirsize_cache'] == 0 ? 'disabled' : ''; ?>>Nettoyer</button></td>
 							</tr>
 							<tr>
-								<td class="pm-cleanup-item">Overhead base de données — espace perdu après suppressions (tables fragmentées)</td>
+								<td class="pm-cleanup-item">
+									Overhead base de données<br>
+									<span class="pm-item-desc">Espace perdu après suppressions (tables MySQL fragmentées). À effectuer de préférence hors heures de pointe.</span>
+								</td>
 								<td style="text-align:center"><span class="pm-count<?php echo $stats['db_overhead_bytes'] == 0 ? ' zero' : ''; ?>"><?php echo esc_html( $stats['db_overhead_label'] ); ?></span></td>
 								<td style="text-align:center"><button class="pm-btn pm-cleanup-btn" data-action="pm_cleanup_db_overhead" <?php echo $stats['db_overhead_bytes'] == 0 ? 'disabled' : ''; ?>>Nettoyer</button></td>
 							</tr>
 							<tr>
 								<td class="pm-cleanup-item">
-									Révisions d'articles — limitez via <code>define('WP_POST_REVISIONS', 10);</code><br>
+									Révisions d'articles<br>
+									<span class="pm-item-desc">Limitez les futures révisions via <code>define('WP_POST_REVISIONS', 10);</code> dans <code>wp-config.php</code>.<br>
 									<?php
 									$rev = defined( 'WP_POST_REVISIONS' ) ? WP_POST_REVISIONS : null;
 									if ( $rev === null ) {
@@ -771,10 +775,10 @@ class PM_DB_Cleaner {
 										$icon = $n <= 15 ? '✅' : ( $n <= 30 ? '⚠️' : '🔴' );
 										echo '<span style="color:' . $col . '">' . $icon . ' Limité à ' . $n . ' ' . $lbl . ' par article</span>';
 									}
-									?>
+									?></span>
 								</td>
 								<td style="text-align:center"><span class="pm-info-count"><?php echo number_format_i18n( $stats['revisions'] ); ?></span></td>
-								<td style="text-align:center"><span style="font-size:11px;color:#646970">Lecture seule</span></td>
+								<td style="text-align:center"><span class="pm-readonly">Lecture seule</span></td>
 							</tr>
 						</tbody>
 					</table>
