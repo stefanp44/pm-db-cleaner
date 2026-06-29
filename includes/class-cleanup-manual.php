@@ -1,0 +1,118 @@
+<?php
+/**
+ * PM DB Cleaner — Nettoyages manuels
+ * Métadonnées (postmeta/termmeta/usermeta), Dirsize Cache, Overhead BDD.
+ *
+ * @package PM_DB_Cleaner
+ */
+
+if ( ! defined( 'ABSPATH' ) ) { die( '-1' ); }
+
+class PM_DB_Cleaner_Manual {
+
+	private static function ajax_check() {
+		check_ajax_referer( 'pm_db_cleanup', 'nonce' );
+		if ( ! current_user_can( 'manage_options' ) ) { wp_send_json_error(); }
+	}
+
+	// ─── Métadonnées : récupération des clés ─────────────────────────────────
+
+	public static function ajax_get_meta_keys() {
+		self::ajax_check();
+		global $wpdb;
+		$type = isset( $_POST['type'] ) ? sanitize_text_field( $_POST['type'] ) : 'post';
+		$keys = array();
+		if ( in_array( $type, array( 'post', 'all' ), true ) ) {
+			$keys = array_merge( $keys, $wpdb->get_col( "SELECT DISTINCT meta_key FROM $wpdb->postmeta ORDER BY meta_key" ) );
+		}
+		if ( in_array( $type, array( 'term', 'all' ), true ) ) {
+			$keys = array_merge( $keys, $wpdb->get_col( "SELECT DISTINCT meta_key FROM $wpdb->termmeta ORDER BY meta_key" ) );
+		}
+		if ( in_array( $type, array( 'user', 'all' ), true ) ) {
+			$keys = array_merge( $keys, $wpdb->get_col( "SELECT DISTINCT meta_key FROM $wpdb->usermeta ORDER BY meta_key" ) );
+		}
+		$keys = array_unique( $keys );
+		sort( $keys );
+		wp_send_json_success( array( 'keys' => $keys ) );
+	}
+
+	// ─── Métadonnées : suppression ────────────────────────────────────────────
+
+	public static function ajax_delete_custom_fields() {
+		self::ajax_check();
+		global $wpdb;
+		$type = isset( $_POST['type'] ) ? sanitize_text_field( $_POST['type'] ) : 'post';
+		$keys = isset( $_POST['keys'] ) ? array_map( 'sanitize_text_field', (array) $_POST['keys'] ) : array();
+		if ( empty( $keys ) ) { wp_send_json_error( array( 'message' => 'Aucune clé sélectionnée.' ) ); }
+		if ( count( $keys ) > 50 ) { wp_send_json_error( array( 'message' => 'Maximum 50 clés par opération.' ) ); }
+
+		$tables = array();
+		if ( in_array( $type, array( 'post', 'all' ), true ) ) { $tables[] = array( 'table' => $wpdb->postmeta,  'col' => 'meta_key' ); }
+		if ( in_array( $type, array( 'term', 'all' ), true ) ) { $tables[] = array( 'table' => $wpdb->termmeta,  'col' => 'meta_key' ); }
+		if ( in_array( $type, array( 'user', 'all' ), true ) ) { $tables[] = array( 'table' => $wpdb->usermeta,  'col' => 'meta_key' ); }
+
+		$total = 0; $details = array();
+		foreach ( $keys as $key ) {
+			$kt = 0;
+			foreach ( $tables as $t ) {
+				$d = $wpdb->delete( $t['table'], array( $t['col'] => $key ), array( '%s' ) );
+				if ( $d ) { $kt += $d; }
+			}
+			if ( $kt > 0 ) { $details[] = $key . ' : ' . $kt; $total += $kt; }
+		}
+		if ( $total > 0 ) {
+			PM_DB_Cleaner_Logger::log( 'custom_fields', $total, 0, 'MANUEL' );
+			PM_DB_Cleaner_Logger::log_detail( $details );
+		}
+		wp_send_json_success( array(
+			'message' => $total > 0
+				? sprintf( '%d entrées supprimées (%d clé(s))', $total, count( $details ) )
+				: 'Aucune entrée trouvée pour les clés sélectionnées.',
+		) );
+	}
+
+	// ─── Dirsize Cache ────────────────────────────────────────────────────────
+
+	public static function cleanup_dirsize_cache() {
+		global $wpdb;
+		return (int) $wpdb->query( $wpdb->prepare(
+			"DELETE FROM $wpdb->options WHERE option_name LIKE %s LIMIT 500",
+			'%' . $wpdb->esc_like( 'dirsize_cache' ) . '%'
+		) );
+	}
+
+	public static function ajax_cleanup_dirsize_cache() {
+		self::ajax_check();
+		$c = self::cleanup_dirsize_cache();
+		PM_DB_Cleaner_Logger::log( 'dirsize_cache', $c, 0, 'MANUEL' );
+		wp_send_json_success( array( 'message' => sprintf( '%d entrée(s) dirsize_cache supprimée(s)', $c ) ) );
+	}
+
+	// ─── Overhead BDD ─────────────────────────────────────────────────────────
+
+	public static function ajax_cleanup_db_overhead() {
+		self::ajax_check();
+		global $wpdb;
+		$tables = $wpdb->get_results( $wpdb->prepare(
+			"SELECT table_name, Data_free FROM information_schema.TABLES
+			WHERE table_schema = DATABASE() AND table_name LIKE %s AND Data_free > 0
+			ORDER BY Data_free DESC",
+			$wpdb->prefix . '%'
+		) );
+		if ( empty( $tables ) ) {
+			wp_send_json_success( array( 'message' => 'Aucun overhead détecté, vos tables sont déjà optimisées.' ) );
+		}
+		$optimized = 0; $freed = 0;
+		foreach ( $tables as $t ) {
+			$freed += (int) $t->Data_free;
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$wpdb->query( 'OPTIMIZE TABLE `' . esc_sql( $t->table_name ) . '`' );
+			$optimized++;
+		}
+		PM_DB_Cleaner_Logger::log( 'db_overhead', $optimized, 0, 'MANUEL' );
+		wp_send_json_success( array(
+			'message' => sprintf( '%d table(s) optimisée(s) — %s récupérés', $optimized, round( $freed / 1024 / 1024, 1 ) . ' MB' ),
+		) );
+	}
+
+}
