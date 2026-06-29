@@ -1,90 +1,102 @@
 # Changelog — PM DB Cleaner
 
-Toutes les modifications notables de ce projet sont documentées dans ce fichier.
-Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
+All notable changes to this project are documented in this file.
+Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
-## [2026-06-22]
+## [2.0] — 2026-06-29
 
-### Modifié
+### Changed
 
-- **Conversion mu-plugin → plugin classique** : le plugin peut désormais être
-  géré via Extensions > Activer/Désactiver et recevoir des mises à jour
-  automatiques.
-- Ajout de `register_activation_hook` : planifie les 3 tâches cron à
-  l'activation (remplace la planification sur `init` qui se déclenchait à
-  chaque requête).
-- Ajout de `register_deactivation_hook` : supprime les 3 tâches cron à la
-  désactivation via l'interface WordPress — couvre la majorité des cas et
-  évite des tâches orphelines sans intervention manuelle.
-- Ajout de `uninstall.php` : filet de sécurité supplémentaire qui supprime
-  les crons lors d'une désinstallation via Extensions > Supprimer (couvre
-  le cas où le plugin aurait été désactivé sans passer par le hook).
-- Suppression de `schedule_cleanups()` appelé sur `init` : la planification
-  est maintenant gérée exclusivement par le hook d'activation.
-- Initialisation déplacée de `PM_DB_Cleaner::get_instance()` direct vers
-  `add_action( 'plugins_loaded', ... )` — bonne pratique pour un plugin
-  classique.
-- En-tête plugin : ajout de `Update URI` pour la compatibilité avec
-  Plugin Update Checker (GitHub).
-- Section "Avant de supprimer ce plugin" renommée "Supprimer le plugin via
-  SFTP/SSH ?" avec texte mis à jour : clarifie que la désactivation normale
-  via WordPress suffit, et que le bouton manuel ne concerne que la
-  suppression directe de fichier via SFTP/SSH.
+- **Internationalization**: plugin is now natively in English with full `__()` / `_e()` / `esc_html__()` / `esc_attr_e()` coverage throughout all PHP files. French translation (`fr_FR`) provided in `languages/` folder (`pm-db-cleaner-fr_FR.po` / `.mo`). POT template included for future translations.
+- `Text Domain` and `Domain Path` headers added to the plugin file.
+- `load_plugin_textdomain()` registered on `plugins_loaded`.
+- Log mode changed from `MANUEL` to `MANUAL` for consistency with the English codebase.
+- JS strings moved to `wp_localize_script` where applicable; remaining hardcoded strings translated to English.
+
+## [1.4.1] — 2026-06-25
+
+### Changed
+
+- Full architecture refactor: plugin split from a single monolithic PHP file into a multi-file structure under `includes/`.
+  - `class-logger.php` — log writing, rotation, reading and URL retrieval
+  - `class-cleanup-auto.php` — scheduled cron cleanups (daily/weekly/monthly) and AJAX wrappers
+  - `class-cleanup-manual.php` — manual cleanups (postmeta, Dirsize Cache, DB Overhead)
+  - `class-options.php` — WP Options (listing, deletion, autoload analysis, autoload disabling)
+  - `class-cron-orphans.php` — orphan cron task detection and deletion, manual uninstall
+  - `class-admin-page.php` — admin page HTML rendering, statistics, asset enqueueing
+- Main file `pm-db-cleaner.php` now acts as bootstrap only: constants, includes, activation/deactivation hooks and WordPress action registration.
+- Added constants `PM_DB_CLEANER_VERSION` and `PM_DB_CLEANER_FILE` used by includes for path and version references.
+
+### Features
+
+No functional changes — this release is a pure internal restructuring.
+
+## [1.3] — 2026-06-25
+
+### Added
+
+- **WP Options block**: full access to the `wp_options` table — list all option names, real-time server-side filter (500 results max with overflow notice), checkbox selection and permanent deletion with explicit backup confirmation. Distinct from the Autoload block.
+- **Dirsize Cache cleanup**: dedicated row in the Manual cleanups panel. Deletes `wp_options` entries matching `%dirsize_cache%`. Safe to delete — rebuilt automatically on the next media library visit.
+- **Orphaned transient timeouts**: new cleanup (also included in the monthly cron) — deletes `_transient_timeout_xxx` entries whose matching `_transient_xxx` no longer exists. Safest possible approach: only removes a timeout pointing to nothing; permanent transients (no timeout by design) are never touched.
+
+### Changed
+
+- CSS and JS extracted from the PHP file into `assets/admin.css` and `assets/admin.js`, loaded via `wp_enqueue_style` / `wp_enqueue_script`.
+- Layout restructured: main grid split into 2/3 (cleanup table) + 1/3 (Autoload + Manual cleanups). Bottom grids: Metadata/WP Options and Cron orphans/SFTP each in a 1/2 + 1/2 layout.
+- "Custom Fields" renamed to "Metadata (postmeta)" to accurately reflect the underlying table.
+- Manual cleanup items (Dirsize Cache, DB Overhead, Post revisions) grouped into a single "Manual cleanups" panel in the 1/3 column, below Autoload.
+- System section now contains only automatic cleanups (Action Scheduler, Expired transients, Orphaned transient timeouts).
+- `max-width: 100%` on `.pm-db-cleaner-wrap` for full admin width usage.
+- "Delete plugin via SFTP/SSH?" title styled in red (`.pm-pane-title--danger`) to distinguish it from cleanup operations.
+- All inline styles removed; replaced by CSS classes in `admin.css`.
+- `.pm-item-desc` font size increased from 12px to 14px.
+
+### Fixed
+
+- `cleanup_orphan_term_relationships()` and its `get_stats()` counterpart now use `$wpdb->prepare()` with `%s` placeholders for excluded taxonomies — previously injected directly via `implode()`.
+- `ajax_get_option_keys()` now limited to 500 results with server-side filtering; previously returned the entire `wp_options` table in a single JSON response.
+- Dirsize cache query corrected to use `LIKE '%dirsize_cache%'` (wildcards on both sides); previously used an exact match that always returned 0.
+
+## [1.1] — 2026-06-22
+
+### Changed
+
+- **Converted from mu-plugin to standard plugin**: can now be managed via Plugins > Activate/Deactivate and receive automatic updates.
+- Added `register_activation_hook`: schedules the 3 cron tasks on activation (replaces scheduling on `init` which fired on every request).
+- Added `register_deactivation_hook`: removes the 3 cron tasks on deactivation via the WordPress interface.
+- Added `uninstall.php`: safety net that removes cron tasks on deletion via Plugins > Delete.
+- Removed `schedule_cleanups()` called on `init`: scheduling is now handled exclusively by the activation hook.
+- Initialization moved from direct `PM_DB_Cleaner::get_instance()` call to `add_action( 'plugins_loaded', ... )`.
+- Plugin header: added `Update URI` for Plugin Update Checker (GitHub) compatibility.
+- "Before removing this plugin" section renamed to "Deleting the plugin via SFTP/SSH?" with updated copy clarifying that normal WordPress deactivation is sufficient, and the manual button only applies to direct SFTP/SSH file deletion.
+- Plugin Update Checker configuration moved to a separate `update-checker-config.php` file (excluded from git via `.gitignore` while the repository was private).
 
 ## [2026-06-13] (3)
 
-### Ajouté
+### Added
 
-- Section "Avant de supprimer ce plugin" : bouton de désinstallation qui
-  retire les 3 tâches cron récurrentes de PM DB Cleaner
-  (`pm_cleanup_action_scheduler_daily`, `pm_cleanup_database_weekly`,
-  `pm_cleanup_monthly`) via `wp_clear_scheduled_hook()`. Nécessaire car le
-  plugin est un mu-plugin sans hook de désinstallation WordPress : sans ce
-  bouton, supprimer le fichier via SFTP/SSH laisserait ces 3 tâches
-  planifiées indéfiniment (elles deviendraient des "tâches cron
-  orphelines"). Confirmation explicite requise, action réversible (la
-  réactivation du plugin replanifie automatiquement ces tâches).
+- "Before removing this plugin" section: manual uninstall button that removes the 3 PM DB Cleaner recurring cron tasks via `wp_clear_scheduled_hook()`. Required as the plugin was a mu-plugin with no WordPress uninstall hook.
 
 ## [2026-06-13] (2)
 
-### Corrigé
+### Fixed
 
-- Heures affichées pour les tâches cron (planifications automatiques et
-  tâches orphelines) corrigées : remplacement de `date_i18n()` par
-  `get_date_from_gmt()` pour la conversion UTC → heure locale du site
-  (Réglages > Général > Fuseau horaire), gérant correctement le passage
-  heure d'été/hiver. Un décalage de 2h était visible sur les tâches
-  BackWPup en comparaison avec WP Crontrol.
+- Cron task times (scheduled cleanups and orphan tasks) corrected: replaced `date_i18n()` with `get_date_from_gmt()` for UTC → site local time conversion, correctly handling DST. A 2-hour offset was visible on BackWPup tasks compared to WP Crontrol.
 
 ## [2026-06-13]
 
-### Ajouté
+### Added
 
-- Nouvelle section "Tâches Cron orphelines" : détecte les hooks planifiés
-  sans aucun callback enregistré (`has_action()` vide), généralement des
-  résidus d'un plugin désinstallé. Détection effectuée au chargement de la
-  page admin (pas via `admin-ajax.php`) pour refléter le même contexte
-  d'exécution que WP Crontrol et éviter les faux positifs liés aux plugins
-  qui n'enregistrent leur callback que via leur propre `admin_menu` (cas
-  observé avec SureMail). Suppression manuelle uniquement, avec confirmation
-  explicite obligatoire ("je sais que ce plugin n'est plus utilisé"),
-  revérifiée côté serveur. Limite de 50 tâches par opération.
-- Hook Core `wp_delete_temp_updater_backups` ajouté à la liste des hooks
-  jamais considérés comme orphelins.
+- New "Orphan cron tasks" section: detects scheduled hooks with no registered callback (`has_action()` empty), typically leftovers from an uninstalled plugin. Detection runs at admin page load (not via `admin-ajax.php`) to match WP Crontrol's execution context and avoid false positives from plugins that register their callback only via `admin_menu` (observed with SureMail). Manual deletion only, with mandatory explicit confirmation, re-verified server-side. Limit of 50 tasks per operation.
+- Core hook `wp_delete_temp_updater_backups` added to the list of hooks never considered orphaned.
 
-### Modifié
+### Changed
 
-- Bloc "Nettoyage automatique programmé" : chaque ligne explicite désormais
-  précisément ce qu'elle couvre (sections Posts / Commentaires / Termes &
-  Taxonomies / Utilisateurs / WooCommerce pour le nettoyage hebdomadaire,
-  Commentaires + Système pour le mensuel), avec une note sur ce qui n'est
-  jamais automatisé (Custom Fields, Autoload, Overhead BDD).
-- Custom Fields et Autoload (wp_options) déplacés hors du tableau principal,
-  dans une grille deux colonnes dédiée en bas de page. Ajout du CSS
-  `.pm-two-col` / `.pm-pane` / `.pm-pane-title` (absent jusqu'ici).
+- "Scheduled automatic cleanup" block: each line now explicitly describes what it covers (Posts / Comments / Terms & Taxonomies / Users / WooCommerce for weekly, Comments + System for monthly), with a note on what is never automated (Custom Fields, Autoload, DB Overhead).
+- Custom Fields and Autoload (wp_options) moved out of the main table into a dedicated two-column grid at the bottom of the page.
 
 ## [2026-06-09]
 
-Version de référence v6, déploiement en cours sur les sites pilotes.
+Reference version v6, deployment in progress on pilot sites.

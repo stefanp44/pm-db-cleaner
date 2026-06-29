@@ -1,74 +1,80 @@
 # PM DB Cleaner
 
-Plugin WordPress de nettoyage automatique et manuel de la base de données. Développé par [Perspectives Marketing](https://perspectives.marketing).
+WordPress plugin for automatic and manual database cleanup. Developed by [Perspectives Marketing](https://perspectives.marketing).
 
 ---
 
-## Fonctionnalités
+## Features
 
-### Nettoyages automatiques programmés
+### Scheduled automatic cleanups
 
-| Fréquence | Ce qui est nettoyé |
-|-----------|-------------------|
-| Quotidien | Action Scheduler — actions terminées, échouées ou annulées de plus de 7 jours |
-| Hebdomadaire | Posts, Commentaires, Termes & Taxonomies, Utilisateurs (hors multisite), WooCommerce — métadonnées orphelines/dupliquées, caches oEmbed, relations de taxonomie orphelines, variations orphelines |
-| Mensuel | Commentaires en corbeille, transients expirés, timeouts de transients orphelins |
+| Frequency | What is cleaned |
+|-----------|----------------|
+| Daily | Action Scheduler — completed, failed or cancelled tasks older than 7 days |
+| Weekly | Posts, Comments, Terms & Taxonomies, Users (excluding multisite), WooCommerce — orphaned/duplicated metadata, oEmbed caches, orphaned taxonomy relationships, orphaned variations |
+| Monthly | Trashed comments, expired transients, orphaned transient timeouts |
 
-### Nettoyages manuels
+### Manual cleanups
 
-- **Métadonnées (postmeta)** — liste des clés meta avec filtre, sélection et suppression par table (posts, termes, utilisateurs)
-- **WP Options** — accès complet à la table `wp_options` avec filtre et suppression (zone à risque, avertissement explicite)
-- **Autoload** — analyse du poids total autoloadé, top 10 des options les plus lourdes, désactivation sélective de l'autoload
-- **Dirsize Cache** — suppression du cache de taille des dossiers uploads
-- **Overhead BDD** — optimisation des tables MySQL fragmentées (`OPTIMIZE TABLE`)
-- **Tâches Cron orphelines** — détection et suppression des hooks planifiés sans callback enregistré
+- **Metadata (postmeta)** — list meta keys with filter, selection and deletion by table (posts, terms, users)
+- **WP Options** — full access to the `wp_options` table with filter and deletion (high-risk area, explicit warning)
+- **Autoload** — analyze total autoloaded size, top 10 heaviest options, selective autoload disabling
+- **Dirsize Cache** — delete the uploads folder size cache
+- **DB Overhead** — optimize fragmented MySQL tables (`OPTIMIZE TABLE`)
+- **Orphan cron tasks** — detect and delete scheduled hooks with no registered callback
 
-### Informations
+### Informational
 
-- **Révisions d'articles** — compteur et statut de la constante `WP_POST_REVISIONS`
+- **Post revisions** — counter and status of the `WP_POST_REVISIONS` constant
 
 ---
 
 ## Installation
 
-1. Télécharger le plugin et le décompresser dans `wp-content/plugins/pm-db-cleaner/`
-2. S'assurer que le dossier `plugin-update-checker/` est présent à la racine du plugin
-3. Activer via **Extensions > Activer** — les 3 tâches cron sont planifiées automatiquement
-4. Accéder à **Outils > PM DB Cleaner**
+1. Download the plugin and unzip it into `wp-content/plugins/pm-db-cleaner/`
+2. Make sure the `plugin-update-checker/` folder is present at the plugin root
+3. Activate via **Plugins > Activate** — the 3 cron tasks are scheduled automatically
+4. Go to **Tools > PM DB Cleaner**
 
 ---
 
-## Mises à jour
+## Updates
 
-Les mises à jour sont gérées via [Plugin Update Checker](https://github.com/YahnisElsts/plugin-update-checker) (v5.7) depuis ce dépôt GitHub privé. WordPress notifie automatiquement lorsqu'une nouvelle version est disponible.
-
----
-
-## Désinstallation
-
-**Via Extensions > Désactiver puis Supprimer** — les tâches cron sont supprimées automatiquement à la désactivation et à la désinstallation.
-
-**Via SFTP/SSH** — utiliser le bouton "Préparer la suppression manuelle" dans l'interface du plugin **avant** de supprimer le fichier, pour éviter que les 3 tâches cron restent planifiées indéfiniment.
+Updates are managed via [Plugin Update Checker](https://github.com/YahnisElsts/plugin-update-checker) (v5.7) from this GitHub repository. WordPress notifies automatically when a new version is available.
 
 ---
 
-## Sécurité
+## Uninstallation
 
-- Toutes les actions AJAX sont protégées par nonce (`pm_db_cleanup`) et vérification `manage_options`
-- Les suppressions destructives requièrent une confirmation explicite par case à cocher
-- Les limites par opération (500 enregistrements, 50 clés, 15 options) préviennent les timeouts
-- Les logs sont stockés dans `wp-content/uploads/pm-db-cleaner.txt` (protégé par Wordfence contre l'exécution PHP)
-- Les entrées de log n'exposent aucun identifiant utilisateur (AUTO/MANUEL uniquement)
+**Via Plugins > Deactivate then Delete** — cron tasks are removed automatically on deactivation and uninstallation.
+
+**Via SFTP/SSH** — use the "Prepare manual deletion" button in the plugin interface **before** deleting the file, to prevent the 3 cron tasks from remaining scheduled indefinitely.
+
+---
+
+## Security
+
+- All AJAX actions are protected by nonce (`pm_db_cleanup`) and `manage_options` capability check
+- Destructive deletions require explicit confirmation via checkbox
+- Per-operation limits (500 records, 50 keys, 15 options) prevent timeouts
+- Logs are stored in `wp-content/uploads/pm-db-cleaner.txt` (protected by Wordfence against PHP execution)
+- Log entries expose no user identifiers (AUTO/MANUAL mode only)
 
 ---
 
 ## Logs
 
-Les nettoyages automatiques et manuels sont tracés dans `wp-content/uploads/pm-db-cleaner.txt`.
+All automatic and manual cleanups are logged in `wp-content/uploads/pm-db-cleaner.txt`.
 
-- Rotation automatique au-delà de 5 MB
-- Suppression des archives de plus de 90 jours
-- Sur multisite : un fichier par site (`pm-db-cleaner-site-{id}.txt`)
+- Automatic rotation above 5 MB
+- Archives older than 90 days are deleted
+- On multisite: one file per site (`pm-db-cleaner-site-{id}.txt`)
+
+---
+
+## Internationalization
+
+The plugin is natively in English. A French translation (`fr_FR`) is included in the `languages/` folder. To add another language, use the `.pot` template file provided.
 
 ---
 
@@ -76,16 +82,31 @@ Les nettoyages automatiques et manuels sont tracés dans `wp-content/uploads/pm-
 
 ```
 pm-db-cleaner/
-├── pm-db-cleaner.php          # Fichier principal
-├── uninstall.php              # Nettoyage à la désinstallation
+├── pm-db-cleaner.php              # Main file (bootstrap)
+├── update-checker-config.php      # Plugin Update Checker configuration
+├── uninstall.php                  # Cleanup on uninstallation
 ├── assets/
 │   ├── admin.css
-│   └── admin.js
-└── plugin-update-checker/     # YahnisElsts/plugin-update-checker v5.7
+│   ├── admin.js
+│   └── img/
+│       ├── icon-128x128.png
+│       └── icon-256x256.png
+├── includes/
+│   ├── class-logger.php
+│   ├── class-cleanup-auto.php
+│   ├── class-cleanup-manual.php
+│   ├── class-options.php
+│   ├── class-cron-orphans.php
+│   └── class-admin-page.php
+├── languages/
+│   ├── pm-db-cleaner.pot
+│   ├── pm-db-cleaner-fr_FR.po
+│   └── pm-db-cleaner-fr_FR.mo
+└── plugin-update-checker/         # YahnisElsts/plugin-update-checker v5.7
 ```
 
 ---
 
-## Auteur
+## Author
 
-[Perspectives Marketing](https://perspectives.marketing) — usage interne, déploiement sur flotte de sites clients.
+[Perspectives Marketing](https://perspectives.marketing) — internal use, deployed across a fleet of client sites.
