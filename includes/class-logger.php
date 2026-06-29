@@ -1,7 +1,7 @@
 <?php
 /**
  * PM DB Cleaner — Logger
- * Gestion des logs de nettoyage (écriture, rotation, lecture).
+ * Handles cleanup log writing, rotation, reading and URL retrieval.
  *
  * @package PM_DB_Cleaner
  */
@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) { die( '-1' ); }
 class PM_DB_Cleaner_Logger {
 
 	/**
-	 * Retourne le chemin du fichier de log courant.
+	 * Returns the path of the current log file.
 	 */
 	private static function get_log_file() {
 		$upload_dir = wp_upload_dir();
@@ -28,12 +28,12 @@ class PM_DB_Cleaner_Logger {
 	}
 
 	/**
-	 * Écrit une entrée de log.
+	 * Writes a log entry.
 	 */
 	public static function log( $type, $count, $remaining = 0, $mode = 'AUTO' ) {
 		$log_file = self::get_log_file();
 
-		// Rotation automatique > 5 MB
+		// Automatic rotation above 5 MB
 		if ( file_exists( $log_file ) && filesize( $log_file ) > 5 * 1024 * 1024 ) {
 			rename( $log_file, str_replace( '.txt', '-' . date( 'Y-m-d-His' ) . '.txt', $log_file ) );
 			foreach ( (array) glob( self::get_log_glob() ) as $old ) {
@@ -44,8 +44,8 @@ class PM_DB_Cleaner_Logger {
 		$ts      = current_time( 'Y-m-d H:i:s' );
 		$label   = self::get_label( $type );
 		$message = $remaining > 0
-			? sprintf( '[%s] %s | %s | %d supprimés | %d restants', $ts, $mode, $label, $count, $remaining )
-			: sprintf( '[%s] %s | %s | %d supprimés', $ts, $mode, $label, $count );
+			? sprintf( '[%s] %s | %s | %d deleted | %d remaining', $ts, $mode, $label, $count, $remaining )
+			: sprintf( '[%s] %s | %s | %d deleted', $ts, $mode, $label, $count );
 
 		if ( is_multisite() ) {
 			$message .= ' | site:' . get_blog_details( get_current_blog_id() )->blogname;
@@ -55,7 +55,7 @@ class PM_DB_Cleaner_Logger {
 	}
 
 	/**
-	 * Écrit une ligne de détail (ex: clés supprimées).
+	 * Writes a detail line (e.g. deleted keys).
 	 */
 	public static function log_detail( $details ) {
 		$log_file = self::get_log_file();
@@ -64,7 +64,7 @@ class PM_DB_Cleaner_Logger {
 	}
 
 	/**
-	 * Récupère les dernières lignes du log.
+	 * Returns the most recent log lines.
 	 */
 	public static function get_recent( $lines = 20 ) {
 		$log_file = self::get_log_file();
@@ -74,7 +74,7 @@ class PM_DB_Cleaner_Logger {
 	}
 
 	/**
-	 * Retourne l'URL du fichier de log.
+	 * Returns the URL of the log file.
 	 */
 	public static function get_log_url() {
 		$upload_dir = wp_upload_dir();
@@ -85,33 +85,33 @@ class PM_DB_Cleaner_Logger {
 	}
 
 	/**
-	 * Labels lisibles par type de nettoyage.
+	 * Returns a human-readable label for a given cleanup type.
 	 */
 	public static function get_label( $type ) {
 		$labels = array(
-			'orphan_postmeta'           => 'Posts - Métadonnées orphelines',
-			'duplicated_postmeta'       => 'Posts - Métadonnées dupliquées',
-			'oembed_postmeta'           => 'Posts - Caches oEmbed',
-			'orphan_commentmeta'        => 'Commentaires - Métadonnées orphelines',
-			'duplicated_commentmeta'    => 'Commentaires - Métadonnées dupliquées',
-			'trashed_comments'          => 'Commentaires - En corbeille',
-			'orphan_termmeta'           => 'Termes - Métadonnées orphelines',
-			'duplicated_termmeta'       => 'Termes - Métadonnées dupliquées',
-			'orphan_term_relationships' => 'Termes - Relations orphelines',
-			'orphan_usermeta'           => 'Utilisateurs - Métadonnées orphelines',
-			'duplicated_usermeta'       => 'Utilisateurs - Métadonnées dupliquées',
-			'action_scheduler_daily'    => 'Action Scheduler',
-			'expired_transients'        => 'Transients expirés',
-			'orphan_transient_timeouts' => 'Transients - Timeouts orphelins',
-			'orphaned_variations'       => 'WooCommerce - Variations orphelines',
-			'database_weekly'           => 'Base de données (hebdo)',
-			'monthly'                   => 'Commentaires + Transients (mensuel)',
-			'custom_fields'             => 'Métadonnées - Suppression manuelle',
-			'wp_options'                => 'WP Options - Suppression manuelle',
-			'wp_options_autoload'       => 'WP Options - Autoload désactivé',
-			'db_overhead'               => 'Overhead BDD - Tables optimisées',
-			'dirsize_cache'             => 'Système - Dirsize Cache supprimé',
-			'cron_orphans'              => 'Cron - Tâches orphelines supprimées',
+			'orphan_postmeta'           => __( 'Posts - Orphaned metadata', 'pm-db-cleaner' ),
+			'duplicated_postmeta'       => __( 'Posts - Duplicated metadata', 'pm-db-cleaner' ),
+			'oembed_postmeta'           => __( 'Posts - oEmbed caches', 'pm-db-cleaner' ),
+			'orphan_commentmeta'        => __( 'Comments - Orphaned metadata', 'pm-db-cleaner' ),
+			'duplicated_commentmeta'    => __( 'Comments - Duplicated metadata', 'pm-db-cleaner' ),
+			'trashed_comments'          => __( 'Comments - Trashed', 'pm-db-cleaner' ),
+			'orphan_termmeta'           => __( 'Terms - Orphaned metadata', 'pm-db-cleaner' ),
+			'duplicated_termmeta'       => __( 'Terms - Duplicated metadata', 'pm-db-cleaner' ),
+			'orphan_term_relationships' => __( 'Terms - Orphaned relationships', 'pm-db-cleaner' ),
+			'orphan_usermeta'           => __( 'Users - Orphaned metadata', 'pm-db-cleaner' ),
+			'duplicated_usermeta'       => __( 'Users - Duplicated metadata', 'pm-db-cleaner' ),
+			'action_scheduler_daily'    => __( 'Action Scheduler', 'pm-db-cleaner' ),
+			'expired_transients'        => __( 'Expired transients', 'pm-db-cleaner' ),
+			'orphan_transient_timeouts' => __( 'Transients - Orphaned timeouts', 'pm-db-cleaner' ),
+			'orphaned_variations'       => __( 'WooCommerce - Orphaned variations', 'pm-db-cleaner' ),
+			'database_weekly'           => __( 'Database (weekly)', 'pm-db-cleaner' ),
+			'monthly'                   => __( 'Comments + Transients (monthly)', 'pm-db-cleaner' ),
+			'custom_fields'             => __( 'Metadata - Manual deletion', 'pm-db-cleaner' ),
+			'wp_options'                => __( 'WP Options - Manual deletion', 'pm-db-cleaner' ),
+			'wp_options_autoload'       => __( 'WP Options - Autoload disabled', 'pm-db-cleaner' ),
+			'db_overhead'               => __( 'DB Overhead - Tables optimized', 'pm-db-cleaner' ),
+			'dirsize_cache'             => __( 'System - Dirsize cache cleared', 'pm-db-cleaner' ),
+			'cron_orphans'              => __( 'Cron - Orphaned tasks deleted', 'pm-db-cleaner' ),
 		);
 		return $labels[ $type ] ?? $type;
 	}

@@ -1,7 +1,8 @@
 <?php
 /**
- * PM DB Cleaner — Tâches Cron orphelines
- * Détection des hooks planifiés sans callback + désinstallation manuelle.
+ * PM DB Cleaner — Orphan cron tasks
+ * Detection and deletion of scheduled hooks with no registered callback,
+ * plus manual uninstall (file deleted via SFTP/SSH without WP deactivation).
  *
  * @package PM_DB_Cleaner
  */
@@ -11,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) { die( '-1' ); }
 class PM_DB_Cleaner_Cron_Orphans {
 
 	/**
-	 * Hooks WordPress Core — jamais considérés comme orphelins.
+	 * WordPress Core hooks — never considered orphaned.
 	 */
 	private static $core_hooks = array(
 		'wp_version_check', 'wp_update_plugins', 'wp_update_themes',
@@ -23,9 +24,12 @@ class PM_DB_Cleaner_Cron_Orphans {
 	);
 
 	/**
-	 * Détecte les hooks planifiés sans callback enregistré.
-	 * DOIT être appelé depuis admin_page() uniquement (pas depuis admin-ajax)
-	 * pour que admin_menu ait bien été déclenché — évite les faux positifs.
+	 * Detects scheduled hooks with no registered callback.
+	 *
+	 * MUST be called from admin_page() only (not from admin-ajax) so that
+	 * admin_menu has already fired — avoids false positives from plugins
+	 * that register their callback only inside their admin_menu callback
+	 * (observed with SureMail).
 	 */
 	public static function get_orphans() {
 		$cron = _get_cron_array();
@@ -36,14 +40,15 @@ class PM_DB_Cleaner_Cron_Orphans {
 			foreach ( $hooks as $hook => $events ) {
 				if ( in_array( $hook, self::$core_hooks, true ) || has_action( $hook ) ) { continue; }
 				foreach ( $events as $key => $event ) {
+					$schedules  = wp_get_schedules();
 					$orphans[] = array(
 						'hook'       => $hook,
 						'key'        => $key,
 						'timestamp'  => $ts,
-						'next_run'   => get_date_from_gmt( gmdate( 'Y-m-d H:i:s', $ts ), 'd/m/Y à H:i' ),
+						'next_run'   => get_date_from_gmt( gmdate( 'Y-m-d H:i:s', $ts ), 'd/m/Y \a\t H:i' ),
 						'recurrence' => $event['schedule']
-							? ( wp_get_schedules()[ $event['schedule'] ]['display'] ?? $event['schedule'] )
-							: 'Ponctuel',
+							? ( $schedules[ $event['schedule'] ]['display'] ?? $event['schedule'] )
+							: __( 'One-time', 'pm-db-cleaner' ),
 						'args'       => $event['args'],
 					);
 				}
@@ -52,17 +57,17 @@ class PM_DB_Cleaner_Cron_Orphans {
 		return $orphans;
 	}
 
-	// ─── AJAX : suppression des orphelins ─────────────────────────────────────
+	// ─── AJAX: delete orphaned tasks ──────────────────────────────────────────
 
 	public static function ajax_delete_cron_orphans() {
 		check_ajax_referer( 'pm_db_cleanup', 'nonce' );
 		if ( ! current_user_can( 'manage_options' ) ) { wp_send_json_error(); }
 		if ( empty( $_POST['confirmed'] ) || $_POST['confirmed'] !== '1' ) {
-			wp_send_json_error( array( 'message' => 'Confirmation requise.' ) );
+			wp_send_json_error( array( 'message' => __( 'Confirmation required.', 'pm-db-cleaner' ) ) );
 		}
 		$events = isset( $_POST['events'] ) ? (array) $_POST['events'] : array();
-		if ( empty( $events ) ) { wp_send_json_error( array( 'message' => 'Aucune tâche sélectionnée.' ) ); }
-		if ( count( $events ) > 50 ) { wp_send_json_error( array( 'message' => 'Maximum 50 tâches par opération.' ) ); }
+		if ( empty( $events ) ) { wp_send_json_error( array( 'message' => __( 'No task selected.', 'pm-db-cleaner' ) ) ); }
+		if ( count( $events ) > 50 ) { wp_send_json_error( array( 'message' => __( 'Maximum 50 tasks per operation.', 'pm-db-cleaner' ) ) ); }
 
 		$deleted = 0;
 		foreach ( $events as $event ) {
@@ -74,23 +79,23 @@ class PM_DB_Cleaner_Cron_Orphans {
 			if ( $args === null ) { continue; }
 			foreach ( $args as $ed ) { wp_unschedule_event( $ts, $hook, $ed['args'] ); $deleted++; }
 		}
-		if ( $deleted > 0 ) { PM_DB_Cleaner_Logger::log( 'cron_orphans', $deleted, 0, 'MANUEL' ); }
-		wp_send_json_success( array( 'message' => sprintf( '%d tâche(s) cron orpheline(s) supprimée(s).', $deleted ) ) );
+		if ( $deleted > 0 ) { PM_DB_Cleaner_Logger::log( 'cron_orphans', $deleted, 0, 'MANUAL' ); }
+		wp_send_json_success( array( 'message' => sprintf( __( '%d orphaned cron task(s) deleted.', 'pm-db-cleaner' ), $deleted ) ) );
 	}
 
-	// ─── AJAX : désinstallation manuelle (suppression fichier via SFTP/SSH) ───
+	// ─── AJAX: manual uninstall (file deleted via SFTP/SSH) ──────────────────
 
 	public static function ajax_uninstall_cron() {
 		check_ajax_referer( 'pm_db_cleanup', 'nonce' );
 		if ( ! current_user_can( 'manage_options' ) ) { wp_send_json_error(); }
 		if ( empty( $_POST['confirmed'] ) || $_POST['confirmed'] !== '1' ) {
-			wp_send_json_error( array( 'message' => 'Confirmation requise.' ) );
+			wp_send_json_error( array( 'message' => __( 'Confirmation required.', 'pm-db-cleaner' ) ) );
 		}
 		foreach ( array( 'pm_cleanup_action_scheduler_daily', 'pm_cleanup_database_weekly', 'pm_cleanup_monthly' ) as $hook ) {
 			wp_clear_scheduled_hook( $hook );
 		}
 		wp_send_json_success( array(
-			'message' => 'Tâches cron de PM DB Cleaner supprimées. Vous pouvez maintenant supprimer le fichier en toute sécurité.',
+			'message' => __( 'PM DB Cleaner cron tasks removed. You can now safely delete the plugin file.', 'pm-db-cleaner' ),
 		) );
 	}
 

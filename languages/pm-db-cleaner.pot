@@ -1,0 +1,435 @@
+# PM DB Cleaner — Translation template
+# Copyright (C) 2026 Perspectives Marketing
+# This file is distributed under the same license as the PM DB Cleaner plugin.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PM DB Cleaner 2.0\n"
+"Report-Msgid-Bugs-To: https://github.com/stefanp44/pm-db-cleaner\n"
+"POT-Creation-Date: 2026-06-29 14:29+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Domain: pm-db-cleaner\n"
+
+msgid "%d actions deleted"
+msgstr ""
+
+msgid "%d comments deleted"
+msgstr ""
+
+msgid "%d detected — show"
+msgstr ""
+
+msgid "%d dirsize_cache entry(ies) deleted"
+msgstr ""
+
+msgid "%d entries deleted (%d key(s))"
+msgstr ""
+
+msgid "%d items deleted"
+msgstr ""
+
+msgid "%d option(s) deleted: %s"
+msgstr ""
+
+msgid "%d orphaned cron task(s) deleted."
+msgstr ""
+
+msgid "%d orphaned timeout(s) deleted"
+msgstr ""
+
+msgid "%d table(s) optimized — %s reclaimed"
+msgstr ""
+
+msgid "%d transients deleted"
+msgstr ""
+
+#. translators: %1$d: number of revisions, %2$s: revision/revisions
+msgid "%1$d %2$s per post"
+msgstr ""
+
+msgid "Autoload disabled for %d option(s): %s"
+msgstr ""
+
+msgid "History (%d most recent)"
+msgstr ""
+
+#. translators: %1$d: number, %2$s: revision(s)
+msgid "Limited to %1$d %2$s per post"
+msgstr ""
+
+msgid "Total: %d items cleaned"
+msgstr ""
+
+msgid "Action Scheduler"
+msgstr ""
+
+msgid "Action Scheduler (tasks older than 7 days)"
+msgstr ""
+
+msgid "Action Scheduler:"
+msgstr ""
+
+msgid "All"
+msgstr ""
+
+msgid "Analyze"
+msgstr ""
+
+msgid "Autoload (wp_options)"
+msgstr ""
+
+msgid "Cache of the uploads folder sizes. Rebuilt automatically on the next visit to the media library. Safe to delete."
+msgstr ""
+
+msgid "Clean"
+msgstr ""
+
+msgid "Clean all items? This may take a while."
+msgstr ""
+
+msgid "Clean everything now"
+msgstr ""
+
+msgid "Cleaning…"
+msgstr ""
+
+msgid "Comments"
+msgstr ""
+
+msgid "Comments + Transients (monthly)"
+msgstr ""
+
+msgid "Comments + Transients:"
+msgstr ""
+
+msgid "Comments - Duplicated metadata"
+msgstr ""
+
+msgid "Comments - Orphaned metadata"
+msgstr ""
+
+msgid "Comments - Trashed"
+msgstr ""
+
+msgid "Confirmation required."
+msgstr ""
+
+msgid "Confirmation:"
+msgstr ""
+
+msgid "Cron - Orphaned tasks deleted"
+msgstr ""
+
+msgid "DB Overhead - Tables optimized"
+msgstr ""
+
+msgid "Daily cleanup — removes completed, failed or cancelled tasks older than 7 days (and their logs)"
+msgstr ""
+
+msgid "Database (weekly)"
+msgstr ""
+
+msgid "Database overhead"
+msgstr ""
+
+msgid "Database:"
+msgstr ""
+
+msgid "Deactivating via Plugins > Deactivate"
+msgstr ""
+
+msgid "Delete selection"
+msgstr ""
+
+msgid "Deleting the file directly via SFTP/SSH"
+msgstr ""
+
+msgid "Deleting the plugin via SFTP/SSH?"
+msgstr ""
+
+msgid "Developed by"
+msgstr ""
+
+msgid "Dirsize Cache"
+msgstr ""
+
+msgid "Disable autoload for selection"
+msgstr ""
+
+msgid "Disabling autoload changes how these options are loaded. Reversible, but may affect performance."
+msgstr ""
+
+msgid "Done!"
+msgstr ""
+
+msgid "Download full log file"
+msgstr ""
+
+msgid "Duplicated metadata"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "Expired transients"
+msgstr ""
+
+msgid "Filter keys…"
+msgstr ""
+
+msgid "Filter options…"
+msgstr ""
+
+msgid "High-risk area — use at your own risk."
+msgstr ""
+
+msgid "I am about to delete the plugin file via SFTP/SSH — remove its 3 scheduled cron tasks"
+msgstr ""
+
+msgid "I have made a full database backup. Deletion is permanent and irreversible."
+msgstr ""
+
+msgid "I have made a full database backup. I know exactly what I am deleting and accept the risks. Deletion is permanent and irreversible."
+msgstr ""
+
+msgid "I know that the plugin(s) behind these tasks are no longer used on this site."
+msgstr ""
+
+msgid "Limit future revisions via"
+msgstr ""
+
+msgid "Mandatory confirmation:"
+msgstr ""
+
+msgid "Manual cleanups"
+msgstr ""
+
+msgid "Maximum 15 options per operation."
+msgstr ""
+
+msgid "Maximum 50 keys per operation."
+msgstr ""
+
+msgid "Maximum 50 options per operation."
+msgstr ""
+
+msgid "Maximum 50 tasks per operation."
+msgstr ""
+
+msgid "Metadata (postmeta)"
+msgstr ""
+
+msgid "Metadata (postmeta), WP Options, Autoload, DB Overhead."
+msgstr ""
+
+msgid "Metadata - Manual deletion"
+msgstr ""
+
+msgid "Monitor"
+msgstr ""
+
+msgid "Monthly cleanup"
+msgstr ""
+
+msgid "Next:"
+msgstr ""
+
+msgid "No entries found for the selected keys."
+msgstr ""
+
+msgid "No key selected."
+msgstr ""
+
+msgid "No option found."
+msgstr ""
+
+msgid "No option selected."
+msgstr ""
+
+msgid "No orphan cron tasks detected."
+msgstr ""
+
+msgid "No overhead detected, your tables are already optimized."
+msgstr ""
+
+msgid "No task selected."
+msgstr ""
+
+msgid "Normal"
+msgstr ""
+
+msgid "Not automated — manual only:"
+msgstr ""
+
+msgid "Not scheduled"
+msgstr ""
+
+msgid "Once a month"
+msgstr ""
+
+msgid "One-time"
+msgstr ""
+
+msgid "Orphan cron tasks"
+msgstr ""
+
+msgid "Orphaned metadata"
+msgstr ""
+
+msgid "Orphaned relationships"
+msgstr ""
+
+msgid "Orphaned variations"
+msgstr ""
+
+msgid "Overloaded"
+msgstr ""
+
+msgid "PM DB Cleaner"
+msgstr ""
+
+msgid "PM DB Cleaner cron tasks removed. You can now safely delete the plugin file."
+msgstr ""
+
+msgid "Post revisions"
+msgstr ""
+
+msgid "Posts"
+msgstr ""
+
+msgid "Posts - Duplicated metadata"
+msgstr ""
+
+msgid "Posts - Orphaned metadata"
+msgstr ""
+
+msgid "Posts - oEmbed caches"
+msgstr ""
+
+msgid "Prepare manual deletion"
+msgstr ""
+
+msgid "Read only"
+msgstr ""
+
+msgid "Remove plugin cron tasks"
+msgstr ""
+
+msgid "Revisions disabled"
+msgstr ""
+
+msgid "Scheduled automatic cleanup"
+msgstr ""
+
+msgid "Scheduled hooks with no registered callback (has_action() empty) — leftovers from an uninstalled plugin. Detection runs at page load (like WP Crontrol) to avoid false positives."
+msgstr ""
+
+msgid "System"
+msgstr ""
+
+msgid "System - Dirsize cache cleared"
+msgstr ""
+
+msgid "Terms"
+msgstr ""
+
+msgid "Terms & Taxonomies"
+msgstr ""
+
+msgid "Terms - Duplicated metadata"
+msgstr ""
+
+msgid "Terms - Orphaned metadata"
+msgstr ""
+
+msgid "Terms - Orphaned relationships"
+msgstr ""
+
+msgid "The wp_options table holds critical data for WordPress and your plugins. Deleting the wrong option can break the site. Only act here if you know exactly what you are deleting and have made a backup first."
+msgstr ""
+
+msgid "Transients - Orphaned timeouts"
+msgstr ""
+
+msgid "Transients — orphaned timeouts (timeout with no matching transient)"
+msgstr ""
+
+msgid "Trashed comments"
+msgstr ""
+
+msgid "Unlimited — constant missing from wp-config.php"
+msgstr ""
+
+msgid "User metadata is not cleaned (shared table across all sites)."
+msgstr ""
+
+msgid "Users"
+msgstr ""
+
+msgid "Users - Duplicated metadata"
+msgstr ""
+
+msgid "Users - Orphaned metadata"
+msgstr ""
+
+msgid "WP Options"
+msgstr ""
+
+msgid "WP Options - Autoload disabled"
+msgstr ""
+
+msgid "WP Options - Manual deletion"
+msgstr ""
+
+msgid "Wasted space after deletions (fragmented MySQL tables). Prefer running outside peak hours."
+msgstr ""
+
+msgid "Weekly cleanup — Posts, Comments, Terms & Taxonomies"
+msgstr ""
+
+msgid "WooCommerce"
+msgstr ""
+
+msgid "WooCommerce - Orphaned variations"
+msgstr ""
+
+msgid "You do not have sufficient permissions."
+msgstr ""
+
+msgid "before"
+msgstr ""
+
+msgid "deleting the file to prevent these tasks remaining scheduled indefinitely."
+msgstr ""
+
+msgid "in"
+msgstr ""
+
+msgid "next:"
+msgstr ""
+
+msgid "oEmbed caches"
+msgstr ""
+
+msgid "revision"
+msgstr ""
+
+msgid "revisions"
+msgstr ""
+
+msgid "the 3 cron tasks are removed automatically. Nothing to do here."
+msgstr ""
+
+msgid "without deactivating through WordPress → click below"
+msgstr ""
+
+msgid "ℹ️ Multisite:"
+msgstr ""
+
+msgid ", Users"
+msgstr ""
+
+msgid ", WooCommerce"
+msgstr ""

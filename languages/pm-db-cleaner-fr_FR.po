@@ -1,0 +1,434 @@
+# PM DB Cleaner — French translation
+# Copyright (C) 2026 Perspectives Marketing
+# This file is distributed under the same license as the PM DB Cleaner plugin.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PM DB Cleaner 2.0\n"
+"POT-Creation-Date: 2026-06-29 14:30+0000\n"
+"PO-Revision-Date: 2026-06-29 14:30+0000\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Domain: pm-db-cleaner\n"
+
+msgid "%d actions deleted"
+msgstr "%d action(s) supprimée(s)"
+
+msgid "%d comments deleted"
+msgstr "%d commentaire(s) supprimé(s)"
+
+msgid "%d detected — show"
+msgstr "%d détectée(s) — afficher"
+
+msgid "%d dirsize_cache entry(ies) deleted"
+msgstr "%d entrée(s) dirsize_cache supprimée(s)"
+
+msgid "%d entries deleted (%d key(s))"
+msgstr "%d entrée(s) supprimée(s) (%d clé(s))"
+
+msgid "%d items deleted"
+msgstr "%d élément(s) supprimé(s)"
+
+msgid "%d option(s) deleted: %s"
+msgstr "%d option(s) supprimée(s) : %s"
+
+msgid "%d orphaned cron task(s) deleted."
+msgstr "%d tâche(s) cron orpheline(s) supprimée(s)."
+
+msgid "%d orphaned timeout(s) deleted"
+msgstr "%d timeout(s) orphelin(s) supprimé(s)"
+
+msgid "%d table(s) optimized — %s reclaimed"
+msgstr "%d table(s) optimisée(s) — %s récupérés"
+
+msgid "%d transients deleted"
+msgstr "%d transient(s) supprimé(s)"
+
+msgid "%1$d %2$s per post"
+msgstr "%1$d %2$s par article"
+
+msgid "Autoload disabled for %d option(s): %s"
+msgstr "Autoload désactivé pour %d option(s) : %s"
+
+msgid "History (%d most recent)"
+msgstr "Historique (%d derniers)"
+
+msgid "Limited to %1$d %2$s per post"
+msgstr "Limité à %1$d %2$s par article"
+
+msgid "Total: %d items cleaned"
+msgstr "Total : %d éléments nettoyés"
+
+msgid "Action Scheduler"
+msgstr "Action Scheduler"
+
+msgid "Action Scheduler (tasks older than 7 days)"
+msgstr "Action Scheduler (actions de +7 jours)"
+
+msgid "Action Scheduler:"
+msgstr "Action Scheduler :"
+
+msgid "All"
+msgstr "Toutes"
+
+msgid "Analyze"
+msgstr "Analyser"
+
+msgid "Autoload (wp_options)"
+msgstr "Autoload (wp_options)"
+
+msgid "Cache of the uploads folder sizes. Rebuilt automatically on the next visit to the media library. Safe to delete."
+msgstr "Cache de la taille des dossiers uploads. Se recrée automatiquement à la prochaine visite de la médiathèque. Sans risque."
+
+msgid "Clean"
+msgstr "Nettoyer"
+
+msgid "Clean all items? This may take a while."
+msgstr "Nettoyer tous les éléments ? Cette opération peut prendre du temps."
+
+msgid "Clean everything now"
+msgstr "Tout nettoyer maintenant"
+
+msgid "Cleaning…"
+msgstr "Nettoyage…"
+
+msgid "Comments"
+msgstr "Commentaires"
+
+msgid "Comments + Transients (monthly)"
+msgstr "Commentaires + Transients (mensuel)"
+
+msgid "Comments + Transients:"
+msgstr "Commentaires + Transients :"
+
+msgid "Comments - Duplicated metadata"
+msgstr "Commentaires - Métadonnées dupliquées"
+
+msgid "Comments - Orphaned metadata"
+msgstr "Commentaires - Métadonnées orphelines"
+
+msgid "Comments - Trashed"
+msgstr "Commentaires - En corbeille"
+
+msgid "Confirmation required."
+msgstr "Confirmation requise."
+
+msgid "Confirmation:"
+msgstr "Confirmation :"
+
+msgid "Cron - Orphaned tasks deleted"
+msgstr "Cron - Tâches orphelines supprimées"
+
+msgid "DB Overhead - Tables optimized"
+msgstr "Overhead BDD - Tables optimisées"
+
+msgid "Daily cleanup — removes completed, failed or cancelled tasks older than 7 days (and their logs)"
+msgstr "Nettoyage quotidien — supprime les tâches terminées, échouées ou annulées de plus de 7 jours (et leurs logs)"
+
+msgid "Database (weekly)"
+msgstr "Base de données (hebdo)"
+
+msgid "Database overhead"
+msgstr "Overhead base de données"
+
+msgid "Database:"
+msgstr "Base de données :"
+
+msgid "Deactivating via Plugins > Deactivate"
+msgstr "Désactivation via Extensions > Désactiver"
+
+msgid "Delete selection"
+msgstr "Supprimer la sélection"
+
+msgid "Deleting the file directly via SFTP/SSH"
+msgstr "Suppression directe via SFTP/SSH"
+
+msgid "Deleting the plugin via SFTP/SSH?"
+msgstr "Supprimer le plugin via SFTP/SSH ?"
+
+msgid "Developed by"
+msgstr "Développé par"
+
+msgid "Dirsize Cache"
+msgstr "Dirsize Cache"
+
+msgid "Disable autoload for selection"
+msgstr "Désactiver l'autoload de la sélection"
+
+msgid "Disabling autoload changes how these options are loaded. Reversible, but may affect performance."
+msgstr "Désactiver l'autoload modifie le comportement de chargement de ces options. Réversible, mais peut affecter les performances."
+
+msgid "Done!"
+msgstr "Terminé !"
+
+msgid "Download full log file"
+msgstr "Télécharger le fichier complet"
+
+msgid "Duplicated metadata"
+msgstr "Métadonnées dupliquées"
+
+msgid "Error"
+msgstr "Erreur"
+
+msgid "Expired transients"
+msgstr "Transients expirés"
+
+msgid "Filter keys…"
+msgstr "Filtrer les clés…"
+
+msgid "Filter options…"
+msgstr "Filtrer les options…"
+
+msgid "High-risk area — use at your own risk."
+msgstr "Zone à risque — à utiliser à vos risques et périls."
+
+msgid "I am about to delete the plugin file via SFTP/SSH — remove its 3 scheduled cron tasks"
+msgstr "Je vais supprimer le fichier du plugin via SFTP/SSH — retirer ses 3 tâches cron programmées"
+
+msgid "I have made a full database backup. Deletion is permanent and irreversible."
+msgstr "J'ai effectué une sauvegarde complète de la base de données. La suppression est définitive et irréversible."
+
+msgid "I have made a full database backup. I know exactly what I am deleting and accept the risks. Deletion is permanent and irreversible."
+msgstr "J'ai effectué une sauvegarde complète de la base de données. Je sais exactement ce que je supprime et j'accepte les risques. La suppression est définitive et irréversible."
+
+msgid "I know that the plugin(s) behind these tasks are no longer used on this site."
+msgstr "Je sais que le(s) plugin(s) à l'origine de ces tâches ne sont plus utilisés sur ce site."
+
+msgid "Limit future revisions via"
+msgstr "Limitez les futures révisions via"
+
+msgid "Mandatory confirmation:"
+msgstr "Confirmation obligatoire :"
+
+msgid "Manual cleanups"
+msgstr "Nettoyages manuels"
+
+msgid "Maximum 15 options per operation."
+msgstr "Maximum 15 options par opération."
+
+msgid "Maximum 50 keys per operation."
+msgstr "Maximum 50 clés par opération."
+
+msgid "Maximum 50 options per operation."
+msgstr "Maximum 50 options par opération."
+
+msgid "Maximum 50 tasks per operation."
+msgstr "Maximum 50 tâches par opération."
+
+msgid "Metadata (postmeta)"
+msgstr "Métadonnées (postmeta)"
+
+msgid "Metadata (postmeta), WP Options, Autoload, DB Overhead."
+msgstr "Métadonnées (postmeta), WP Options, Autoload, Overhead BDD."
+
+msgid "Metadata - Manual deletion"
+msgstr "Métadonnées - Suppression manuelle"
+
+msgid "Monitor"
+msgstr "À surveiller"
+
+msgid "Monthly cleanup"
+msgstr "Nettoyage mensuel"
+
+msgid "Next:"
+msgstr "Prochain :"
+
+msgid "No entries found for the selected keys."
+msgstr "Aucune entrée trouvée pour les clés sélectionnées."
+
+msgid "No key selected."
+msgstr "Aucune clé sélectionnée."
+
+msgid "No option found."
+msgstr "Aucune option trouvée."
+
+msgid "No option selected."
+msgstr "Aucune option sélectionnée."
+
+msgid "No orphan cron tasks detected."
+msgstr "Aucune tâche cron orpheline détectée."
+
+msgid "No overhead detected, your tables are already optimized."
+msgstr "Aucun overhead détecté, vos tables sont déjà optimisées."
+
+msgid "No task selected."
+msgstr "Aucune tâche sélectionnée."
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Not automated — manual only:"
+msgstr "Non automatisé — manuel uniquement :"
+
+msgid "Not scheduled"
+msgstr "Non planifié"
+
+msgid "Once a month"
+msgstr "Une fois par mois"
+
+msgid "One-time"
+msgstr "Ponctuel"
+
+msgid "Orphan cron tasks"
+msgstr "Tâches Cron orphelines"
+
+msgid "Orphaned metadata"
+msgstr "Métadonnées orphelines"
+
+msgid "Orphaned relationships"
+msgstr "Relations orphelines"
+
+msgid "Orphaned variations"
+msgstr "Variations orphelines"
+
+msgid "Overloaded"
+msgstr "Surchargé"
+
+msgid "PM DB Cleaner"
+msgstr "PM DB Cleaner"
+
+msgid "PM DB Cleaner cron tasks removed. You can now safely delete the plugin file."
+msgstr "Tâches cron de PM DB Cleaner supprimées. Vous pouvez maintenant supprimer le fichier en toute sécurité."
+
+msgid "Post revisions"
+msgstr "Révisions d'articles"
+
+msgid "Posts"
+msgstr "Posts"
+
+msgid "Posts - Duplicated metadata"
+msgstr "Posts - Métadonnées dupliquées"
+
+msgid "Posts - Orphaned metadata"
+msgstr "Posts - Métadonnées orphelines"
+
+msgid "Posts - oEmbed caches"
+msgstr "Posts - Caches oEmbed"
+
+msgid "Prepare manual deletion"
+msgstr "Préparer la suppression manuelle"
+
+msgid "Read only"
+msgstr "Lecture seule"
+
+msgid "Remove plugin cron tasks"
+msgstr "Supprimer les tâches cron du plugin"
+
+msgid "Revisions disabled"
+msgstr "Révisions désactivées"
+
+msgid "Scheduled automatic cleanup"
+msgstr "Nettoyage automatique programmé"
+
+msgid "Scheduled hooks with no registered callback (has_action() empty) — leftovers from an uninstalled plugin. Detection runs at page load (like WP Crontrol) to avoid false positives."
+msgstr "Hooks planifiés sans callback enregistré (has_action() vide) — résidus d'un plugin désinstallé. Détection au chargement de la page (comme WP Crontrol) pour éviter les faux positifs."
+
+msgid "System"
+msgstr "Système"
+
+msgid "System - Dirsize cache cleared"
+msgstr "Système - Dirsize Cache supprimé"
+
+msgid "Terms"
+msgstr "Termes"
+
+msgid "Terms & Taxonomies"
+msgstr "Termes & Taxonomies"
+
+msgid "Terms - Duplicated metadata"
+msgstr "Termes - Métadonnées dupliquées"
+
+msgid "Terms - Orphaned metadata"
+msgstr "Termes - Métadonnées orphelines"
+
+msgid "Terms - Orphaned relationships"
+msgstr "Termes - Relations orphelines"
+
+msgid "The wp_options table holds critical data for WordPress and your plugins. Deleting the wrong option can break the site. Only act here if you know exactly what you are deleting and have made a backup first."
+msgstr "La table wp_options contient des données critiques pour WordPress et vos plugins. Supprimer une option incorrecte peut casser le site. N'agissez ici que si vous savez exactement ce que vous supprimez et après avoir effectué une sauvegarde."
+
+msgid "Transients - Orphaned timeouts"
+msgstr "Transients - Timeouts orphelins"
+
+msgid "Transients — orphaned timeouts (timeout with no matching transient)"
+msgstr "Transients — timeouts orphelins (timeout sans transient correspondant)"
+
+msgid "Trashed comments"
+msgstr "Commentaires en corbeille"
+
+msgid "Unlimited — constant missing from wp-config.php"
+msgstr "Illimité — constante absente de wp-config.php"
+
+msgid "User metadata is not cleaned (shared table across all sites)."
+msgstr "Les métadonnées utilisateurs ne sont pas nettoyées (table partagée entre tous les sites)."
+
+msgid "Users"
+msgstr "Utilisateurs"
+
+msgid "Users - Duplicated metadata"
+msgstr "Utilisateurs - Métadonnées dupliquées"
+
+msgid "Users - Orphaned metadata"
+msgstr "Utilisateurs - Métadonnées orphelines"
+
+msgid "WP Options"
+msgstr "WP Options"
+
+msgid "WP Options - Autoload disabled"
+msgstr "WP Options - Autoload désactivé"
+
+msgid "WP Options - Manual deletion"
+msgstr "WP Options - Suppression manuelle"
+
+msgid "Wasted space after deletions (fragmented MySQL tables). Prefer running outside peak hours."
+msgstr "Espace perdu après suppressions (tables MySQL fragmentées). À effectuer de préférence hors heures de pointe."
+
+msgid "Weekly cleanup — Posts, Comments, Terms & Taxonomies"
+msgstr "Nettoyage hebdomadaire — Posts, Commentaires, Termes & Taxonomies"
+
+msgid "WooCommerce"
+msgstr "WooCommerce"
+
+msgid "WooCommerce - Orphaned variations"
+msgstr "WooCommerce - Variations orphelines"
+
+msgid "You do not have sufficient permissions."
+msgstr "Vous n'avez pas les permissions nécessaires."
+
+msgid "before"
+msgstr "avant"
+
+msgid "deleting the file to prevent these tasks remaining scheduled indefinitely."
+msgstr "de supprimer le fichier pour éviter que ces tâches restent planifiées indéfiniment."
+
+msgid "in"
+msgstr "dans"
+
+msgid "next:"
+msgstr "prochain :"
+
+msgid "oEmbed caches"
+msgstr "Caches oEmbed"
+
+msgid "revision"
+msgstr "révision"
+
+msgid "revisions"
+msgstr "révisions"
+
+msgid "the 3 cron tasks are removed automatically. Nothing to do here."
+msgstr "les 3 tâches cron sont supprimées automatiquement. Rien à faire ici."
+
+msgid "without deactivating through WordPress → click below"
+msgstr "sans désactivation WordPress → cliquez ci-dessous"
+
+msgid "ℹ️ Multisite:"
+msgstr "ℹ️ Multisite :"
+
+msgid ", Users"
+msgstr ", Utilisateurs"
+
+msgid ", WooCommerce"
+msgstr ", WooCommerce"

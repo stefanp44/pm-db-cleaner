@@ -1,7 +1,7 @@
 <?php
 /**
- * PM DB Cleaner — Nettoyages automatiques
- * Méthodes déclenchées par les tâches cron planifiées.
+ * PM DB Cleaner — Automatic cleanups
+ * Methods triggered by scheduled cron tasks, plus AJAX wrappers for manual triggering.
  *
  * @package PM_DB_Cleaner
  */
@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) { die( '-1' ); }
 class PM_DB_Cleaner_Auto {
 
 	/**
-	 * Retourne les taxonomies exclues du nettoyage des relations.
+	 * Returns taxonomies excluded from relationship cleanup.
 	 */
 	public static function get_excluded_taxonomies() {
 		$excl = array( 'link_category', 'term_language', 'term_translations' );
@@ -38,7 +38,7 @@ class PM_DB_Cleaner_Auto {
 		return $deleted;
 	}
 
-	// ─── Nettoyage hebdomadaire ───────────────────────────────────────────────
+	// ─── Weekly cleanup ───────────────────────────────────────────────────────
 
 	public static function cleanup_database() {
 		$total = 0;
@@ -50,7 +50,7 @@ class PM_DB_Cleaner_Auto {
 		$total += self::cleanup_orphan_termmeta();
 		$total += self::cleanup_duplicated_termmeta();
 		$total += self::cleanup_orphan_term_relationships();
-		// Sur multisite, usermeta est partagée — ne pas nettoyer
+		// On multisite, usermeta is shared across all sites — skip
 		if ( ! is_multisite() ) {
 			$total += self::cleanup_orphan_usermeta();
 			$total += self::cleanup_duplicated_usermeta();
@@ -60,7 +60,7 @@ class PM_DB_Cleaner_Auto {
 		return $total;
 	}
 
-	// ─── Nettoyage mensuel ────────────────────────────────────────────────────
+	// ─── Monthly cleanup ──────────────────────────────────────────────────────
 
 	public static function cleanup_monthly() {
 		$total  = 0;
@@ -122,7 +122,7 @@ class PM_DB_Cleaner_Auto {
 		return $count;
 	}
 
-	// ─── Commentaires ─────────────────────────────────────────────────────────
+	// ─── Comments ─────────────────────────────────────────────────────────────
 
 	public static function cleanup_orphan_commentmeta() {
 		global $wpdb;
@@ -166,7 +166,7 @@ class PM_DB_Cleaner_Auto {
 		return $count;
 	}
 
-	// ─── Termes & Taxonomies ──────────────────────────────────────────────────
+	// ─── Terms & Taxonomies ───────────────────────────────────────────────────
 
 	public static function cleanup_orphan_termmeta() {
 		global $wpdb;
@@ -225,7 +225,7 @@ class PM_DB_Cleaner_Auto {
 		return $count;
 	}
 
-	// ─── Utilisateurs ─────────────────────────────────────────────────────────
+	// ─── Users ────────────────────────────────────────────────────────────────
 
 	public static function cleanup_orphan_usermeta() {
 		global $wpdb;
@@ -258,7 +258,7 @@ class PM_DB_Cleaner_Auto {
 		return $count;
 	}
 
-	// ─── Système ──────────────────────────────────────────────────────────────
+	// ─── System ───────────────────────────────────────────────────────────────
 
 	public static function cleanup_expired_transients() {
 		global $wpdb;
@@ -275,8 +275,9 @@ class PM_DB_Cleaner_Auto {
 	}
 
 	/**
-	 * Supprime les _transient_timeout_xxx dont _transient_xxx est absent.
-	 * Approche la plus safe : on supprime uniquement un timeout qui pointe vers rien.
+	 * Deletes _transient_timeout_xxx entries whose _transient_xxx counterpart is missing.
+	 * Safest possible approach: we only remove a timeout pointing to nothing.
+	 * Permanent transients (no timeout by design) are never touched.
 	 */
 	public static function cleanup_orphan_transient_timeouts() {
 		global $wpdb;
@@ -301,89 +302,6 @@ class PM_DB_Cleaner_Auto {
 		return $count;
 	}
 
-	// ─── Wrappers AJAX ───────────────────────────────────────────────────────
-
-	private static function ajax_check() {
-		check_ajax_referer( 'pm_db_cleanup', 'nonce' );
-		if ( ! current_user_can( 'manage_options' ) ) { wp_send_json_error(); }
-	}
-
-	public static function ajax_cleanup_action_scheduler() {
-		self::ajax_check();
-		$c = self::cleanup_action_scheduler();
-		wp_send_json_success( array( 'message' => sprintf( '%d actions supprimées', $c ) ) );
-	}
-	public static function ajax_cleanup_orphan_postmeta() {
-		self::ajax_check();
-		$c = self::cleanup_orphan_postmeta(); PM_DB_Cleaner_Logger::log( 'orphan_postmeta', $c, 0, 'MANUEL' );
-		wp_send_json_success( array( 'message' => sprintf( '%d éléments supprimés', $c ) ) );
-	}
-	public static function ajax_cleanup_duplicated_postmeta() {
-		self::ajax_check();
-		$c = self::cleanup_duplicated_postmeta(); PM_DB_Cleaner_Logger::log( 'duplicated_postmeta', $c, 0, 'MANUEL' );
-		wp_send_json_success( array( 'message' => sprintf( '%d éléments supprimés', $c ) ) );
-	}
-	public static function ajax_cleanup_oembed_postmeta() {
-		self::ajax_check();
-		$c = self::cleanup_oembed_postmeta(); PM_DB_Cleaner_Logger::log( 'oembed_postmeta', $c, 0, 'MANUEL' );
-		wp_send_json_success( array( 'message' => sprintf( '%d éléments supprimés', $c ) ) );
-	}
-	public static function ajax_cleanup_orphan_commentmeta() {
-		self::ajax_check();
-		$c = self::cleanup_orphan_commentmeta(); PM_DB_Cleaner_Logger::log( 'orphan_commentmeta', $c, 0, 'MANUEL' );
-		wp_send_json_success( array( 'message' => sprintf( '%d éléments supprimés', $c ) ) );
-	}
-	public static function ajax_cleanup_duplicated_commentmeta() {
-		self::ajax_check();
-		$c = self::cleanup_duplicated_commentmeta(); PM_DB_Cleaner_Logger::log( 'duplicated_commentmeta', $c, 0, 'MANUEL' );
-		wp_send_json_success( array( 'message' => sprintf( '%d éléments supprimés', $c ) ) );
-	}
-	public static function ajax_cleanup_orphan_termmeta() {
-		self::ajax_check();
-		$c = self::cleanup_orphan_termmeta(); PM_DB_Cleaner_Logger::log( 'orphan_termmeta', $c, 0, 'MANUEL' );
-		wp_send_json_success( array( 'message' => sprintf( '%d éléments supprimés', $c ) ) );
-	}
-	public static function ajax_cleanup_duplicated_termmeta() {
-		self::ajax_check();
-		$c = self::cleanup_duplicated_termmeta(); PM_DB_Cleaner_Logger::log( 'duplicated_termmeta', $c, 0, 'MANUEL' );
-		wp_send_json_success( array( 'message' => sprintf( '%d éléments supprimés', $c ) ) );
-	}
-	public static function ajax_cleanup_orphan_term_relationships() {
-		self::ajax_check();
-		$c = self::cleanup_orphan_term_relationships(); PM_DB_Cleaner_Logger::log( 'orphan_term_relationships', $c, 0, 'MANUEL' );
-		wp_send_json_success( array( 'message' => sprintf( '%d éléments supprimés', $c ) ) );
-	}
-	public static function ajax_cleanup_orphan_usermeta() {
-		self::ajax_check();
-		$c = self::cleanup_orphan_usermeta(); PM_DB_Cleaner_Logger::log( 'orphan_usermeta', $c, 0, 'MANUEL' );
-		wp_send_json_success( array( 'message' => sprintf( '%d éléments supprimés', $c ) ) );
-	}
-	public static function ajax_cleanup_duplicated_usermeta() {
-		self::ajax_check();
-		$c = self::cleanup_duplicated_usermeta(); PM_DB_Cleaner_Logger::log( 'duplicated_usermeta', $c, 0, 'MANUEL' );
-		wp_send_json_success( array( 'message' => sprintf( '%d éléments supprimés', $c ) ) );
-	}
-	public static function ajax_cleanup_orphaned_variations() {
-		self::ajax_check();
-		$c = self::cleanup_orphaned_variations(); PM_DB_Cleaner_Logger::log( 'orphaned_variations', $c, 0, 'MANUEL' );
-		wp_send_json_success( array( 'message' => sprintf( '%d éléments supprimés', $c ) ) );
-	}
-	public static function ajax_cleanup_trashed_comments() {
-		self::ajax_check();
-		$c = self::cleanup_trashed_comments(); PM_DB_Cleaner_Logger::log( 'trashed_comments', $c, 0, 'MANUEL' );
-		wp_send_json_success( array( 'message' => sprintf( '%d commentaires supprimés', $c ) ) );
-	}
-	public static function ajax_cleanup_expired_transients() {
-		self::ajax_check();
-		$c = self::cleanup_expired_transients(); PM_DB_Cleaner_Logger::log( 'expired_transients', $c, 0, 'MANUEL' );
-		wp_send_json_success( array( 'message' => sprintf( '%d transients supprimés', $c ) ) );
-	}
-	public static function ajax_cleanup_orphan_transient_timeouts() {
-		self::ajax_check();
-		$c = self::cleanup_orphan_transient_timeouts(); PM_DB_Cleaner_Logger::log( 'orphan_transient_timeouts', $c, 0, 'MANUEL' );
-		wp_send_json_success( array( 'message' => sprintf( '%d timeout(s) orphelin(s) supprimé(s)', $c ) ) );
-	}
-
 	// ─── WooCommerce ──────────────────────────────────────────────────────────
 
 	public static function cleanup_orphaned_variations() {
@@ -394,6 +312,89 @@ class PM_DB_Cleaner_Auto {
 			LEFT JOIN {$wpdb->posts} wp ON wp.ID = products.post_parent
 			WHERE wp.ID IS NULL AND products.post_type = 'product_variation' LIMIT 500"
 		);
+	}
+
+	// ─── AJAX wrappers ────────────────────────────────────────────────────────
+
+	private static function ajax_check() {
+		check_ajax_referer( 'pm_db_cleanup', 'nonce' );
+		if ( ! current_user_can( 'manage_options' ) ) { wp_send_json_error(); }
+	}
+
+	public static function ajax_cleanup_action_scheduler() {
+		self::ajax_check();
+		$c = self::cleanup_action_scheduler();
+		wp_send_json_success( array( 'message' => sprintf( __( '%d actions deleted', 'pm-db-cleaner' ), $c ) ) );
+	}
+	public static function ajax_cleanup_orphan_postmeta() {
+		self::ajax_check();
+		$c = self::cleanup_orphan_postmeta(); PM_DB_Cleaner_Logger::log( 'orphan_postmeta', $c, 0, 'MANUAL' );
+		wp_send_json_success( array( 'message' => sprintf( __( '%d items deleted', 'pm-db-cleaner' ), $c ) ) );
+	}
+	public static function ajax_cleanup_duplicated_postmeta() {
+		self::ajax_check();
+		$c = self::cleanup_duplicated_postmeta(); PM_DB_Cleaner_Logger::log( 'duplicated_postmeta', $c, 0, 'MANUAL' );
+		wp_send_json_success( array( 'message' => sprintf( __( '%d items deleted', 'pm-db-cleaner' ), $c ) ) );
+	}
+	public static function ajax_cleanup_oembed_postmeta() {
+		self::ajax_check();
+		$c = self::cleanup_oembed_postmeta(); PM_DB_Cleaner_Logger::log( 'oembed_postmeta', $c, 0, 'MANUAL' );
+		wp_send_json_success( array( 'message' => sprintf( __( '%d items deleted', 'pm-db-cleaner' ), $c ) ) );
+	}
+	public static function ajax_cleanup_orphan_commentmeta() {
+		self::ajax_check();
+		$c = self::cleanup_orphan_commentmeta(); PM_DB_Cleaner_Logger::log( 'orphan_commentmeta', $c, 0, 'MANUAL' );
+		wp_send_json_success( array( 'message' => sprintf( __( '%d items deleted', 'pm-db-cleaner' ), $c ) ) );
+	}
+	public static function ajax_cleanup_duplicated_commentmeta() {
+		self::ajax_check();
+		$c = self::cleanup_duplicated_commentmeta(); PM_DB_Cleaner_Logger::log( 'duplicated_commentmeta', $c, 0, 'MANUAL' );
+		wp_send_json_success( array( 'message' => sprintf( __( '%d items deleted', 'pm-db-cleaner' ), $c ) ) );
+	}
+	public static function ajax_cleanup_orphan_termmeta() {
+		self::ajax_check();
+		$c = self::cleanup_orphan_termmeta(); PM_DB_Cleaner_Logger::log( 'orphan_termmeta', $c, 0, 'MANUAL' );
+		wp_send_json_success( array( 'message' => sprintf( __( '%d items deleted', 'pm-db-cleaner' ), $c ) ) );
+	}
+	public static function ajax_cleanup_duplicated_termmeta() {
+		self::ajax_check();
+		$c = self::cleanup_duplicated_termmeta(); PM_DB_Cleaner_Logger::log( 'duplicated_termmeta', $c, 0, 'MANUAL' );
+		wp_send_json_success( array( 'message' => sprintf( __( '%d items deleted', 'pm-db-cleaner' ), $c ) ) );
+	}
+	public static function ajax_cleanup_orphan_term_relationships() {
+		self::ajax_check();
+		$c = self::cleanup_orphan_term_relationships(); PM_DB_Cleaner_Logger::log( 'orphan_term_relationships', $c, 0, 'MANUAL' );
+		wp_send_json_success( array( 'message' => sprintf( __( '%d items deleted', 'pm-db-cleaner' ), $c ) ) );
+	}
+	public static function ajax_cleanup_orphan_usermeta() {
+		self::ajax_check();
+		$c = self::cleanup_orphan_usermeta(); PM_DB_Cleaner_Logger::log( 'orphan_usermeta', $c, 0, 'MANUAL' );
+		wp_send_json_success( array( 'message' => sprintf( __( '%d items deleted', 'pm-db-cleaner' ), $c ) ) );
+	}
+	public static function ajax_cleanup_duplicated_usermeta() {
+		self::ajax_check();
+		$c = self::cleanup_duplicated_usermeta(); PM_DB_Cleaner_Logger::log( 'duplicated_usermeta', $c, 0, 'MANUAL' );
+		wp_send_json_success( array( 'message' => sprintf( __( '%d items deleted', 'pm-db-cleaner' ), $c ) ) );
+	}
+	public static function ajax_cleanup_orphaned_variations() {
+		self::ajax_check();
+		$c = self::cleanup_orphaned_variations(); PM_DB_Cleaner_Logger::log( 'orphaned_variations', $c, 0, 'MANUAL' );
+		wp_send_json_success( array( 'message' => sprintf( __( '%d items deleted', 'pm-db-cleaner' ), $c ) ) );
+	}
+	public static function ajax_cleanup_trashed_comments() {
+		self::ajax_check();
+		$c = self::cleanup_trashed_comments(); PM_DB_Cleaner_Logger::log( 'trashed_comments', $c, 0, 'MANUAL' );
+		wp_send_json_success( array( 'message' => sprintf( __( '%d comments deleted', 'pm-db-cleaner' ), $c ) ) );
+	}
+	public static function ajax_cleanup_expired_transients() {
+		self::ajax_check();
+		$c = self::cleanup_expired_transients(); PM_DB_Cleaner_Logger::log( 'expired_transients', $c, 0, 'MANUAL' );
+		wp_send_json_success( array( 'message' => sprintf( __( '%d transients deleted', 'pm-db-cleaner' ), $c ) ) );
+	}
+	public static function ajax_cleanup_orphan_transient_timeouts() {
+		self::ajax_check();
+		$c = self::cleanup_orphan_transient_timeouts(); PM_DB_Cleaner_Logger::log( 'orphan_transient_timeouts', $c, 0, 'MANUAL' );
+		wp_send_json_success( array( 'message' => sprintf( __( '%d orphaned timeout(s) deleted', 'pm-db-cleaner' ), $c ) ) );
 	}
 
 }

@@ -1,7 +1,7 @@
 /* PM DB Cleaner — Admin JS */
 jQuery(document).ready(function($) {
 
-	// ─── Nettoyage individuel (boutons Nettoyer) ──────────────────────────
+	// ─── Individual cleanup buttons ─────────────────────────────────────────────
 
 	$('.pm-cleanup-btn').on('click', function(e) {
 		e.preventDefault();
@@ -15,7 +15,7 @@ jQuery(document).ready(function($) {
 				'Cette opération libère l\'espace perdu après les suppressions.\n\n' +
 				'Sur les sites à fort trafic, elle peut provoquer un ralentissement temporaire pendant son exécution.\n\n' +
 				'Procédez de préférence en dehors des heures de pointe.\n\n' +
-				'Continuer ?'
+				'Continue?'
 			);
 			if (!confirmed) return;
 		}
@@ -30,12 +30,12 @@ jQuery(document).ready(function($) {
 				if (response.success) {
 					location.reload();
 				} else {
-					btn.prop('disabled', false).text('Nettoyer');
+					btn.prop('disabled', false).text('Clean');
 					alert(pmDBCleaner.error);
 				}
 			},
 			error: function() {
-				btn.prop('disabled', false).text('Nettoyer');
+				btn.prop('disabled', false).text('Clean');
 				alert(pmDBCleaner.error);
 			}
 		});
@@ -45,7 +45,7 @@ jQuery(document).ready(function($) {
 
 	$('#pm-cleanup-all').on('click', function(e) {
 		e.preventDefault();
-		if (!confirm('Nettoyer tous les éléments ? Cette opération peut prendre du temps.')) return;
+		if (!confirm(pmDBCleaner.confirmAll || 'Clean all items? This may take a while.')) return;
 
 		var btn = $(this);
 		btn.prop('disabled', true).html('<span class="dashicons dashicons-update spin"></span> ' + pmDBCleaner.processing);
@@ -58,12 +58,12 @@ jQuery(document).ready(function($) {
 				if (response.success) {
 					location.reload();
 				} else {
-					btn.prop('disabled', false).html('<span class="dashicons dashicons-database"></span> Tout nettoyer');
+					btn.prop('disabled', false).html('<span class="dashicons dashicons-database"></span> Clean all');
 					alert(pmDBCleaner.error);
 				}
 			},
 			error: function() {
-				btn.prop('disabled', false).html('<span class="dashicons dashicons-database"></span> Tout nettoyer');
+				btn.prop('disabled', false).html('<span class="dashicons dashicons-database"></span> Clean all');
 				alert(pmDBCleaner.error);
 			}
 		});
@@ -76,7 +76,7 @@ jQuery(document).ready(function($) {
 		var btn = $(this);
 		var type = $('input[name="pm_cf_type"]:checked').val();
 
-		btn.prop('disabled', true).text('...');
+		btn.prop('disabled', true).text('…');
 		$('#pm-cf-results').hide();
 		$('#pm-cf-keys-list').empty();
 		$('#pm-cf-confirm-wrap').hide();
@@ -87,7 +87,7 @@ jQuery(document).ready(function($) {
 			type: 'POST',
 			data: { action: 'pm_get_meta_keys', type: type, nonce: pmDBCleaner.nonce },
 			success: function(response) {
-				btn.prop('disabled', false).text('Analyser');
+				btn.prop('disabled', false).text('Analyze');
 				if (response.success && response.data.keys.length > 0) {
 					$.each(response.data.keys, function(i, key) {
 						var safe = $('<div>').text(key).html();
@@ -105,13 +105,13 @@ jQuery(document).ready(function($) {
 				}
 			},
 			error: function() {
-				btn.prop('disabled', false).text('Analyser');
+				btn.prop('disabled', false).text('Analyze');
 				alert(pmDBCleaner.error);
 			}
 		});
 	});
 
-	// Filtre en temps réel — postmeta
+	// Real-time filter — postmeta
 	$('#pm-cf-filter').on('input', function() {
 		var val = $(this).val().toLowerCase();
 		$('#pm-cf-keys-list .pm-key-label').each(function() {
@@ -119,7 +119,7 @@ jQuery(document).ready(function($) {
 		});
 	});
 
-	// Activation bouton suppression postmeta
+	// Enable delete button for postmeta
 	$(document).on('change', '.pm-cf-key, #pm-cf-confirm', function() {
 		var hasChecked = $('.pm-cf-key:checked').length > 0;
 		var confirmed  = $('#pm-cf-confirm').is(':checked');
@@ -133,7 +133,7 @@ jQuery(document).ready(function($) {
 		}
 	});
 
-	// Suppression postmeta
+	// Delete postmeta
 	$('#pm-cf-delete').on('click', function(e) {
 		e.preventDefault();
 		var btn  = $(this);
@@ -142,7 +142,7 @@ jQuery(document).ready(function($) {
 		$('.pm-cf-key:checked').each(function() { keys.push($(this).val()); });
 
 		if (!keys.length || !$('#pm-cf-confirm').is(':checked')) return;
-		btn.prop('disabled', true).text('Suppression...');
+		btn.prop('disabled', true).text('Deleting…');
 
 		$.ajax({
 			url: ajaxurl,
@@ -153,15 +153,15 @@ jQuery(document).ready(function($) {
 					$('.pm-cf-key:checked').closest('label').remove();
 					$('#pm-cf-confirm').prop('checked', false);
 					$('#pm-cf-confirm-wrap').hide();
-					btn.prop('disabled', true).text('Supprimer la sélection');
+					btn.prop('disabled', true).text('Delete selection');
 					alert('✅ ' + response.data.message);
 				} else {
-					btn.prop('disabled', false).text('Supprimer la sélection');
+					btn.prop('disabled', false).text('Delete selection');
 					alert(pmDBCleaner.error);
 				}
 			},
 			error: function() {
-				btn.prop('disabled', false).text('Supprimer la sélection');
+				btn.prop('disabled', false).text('Delete selection');
 				alert(pmDBCleaner.error);
 			}
 		});
@@ -171,7 +171,7 @@ jQuery(document).ready(function($) {
 
 	function pmWpoLoad(search) {
 		var btn = $('#pm-wpo-analyze');
-		btn.prop('disabled', true).text('...');
+		btn.prop('disabled', true).text('…');
 		$('#pm-wpo-keys-list').empty();
 		$('#pm-wpo-confirm-wrap').hide();
 		$('#pm-wpo-delete').prop('disabled', true);
@@ -181,12 +181,12 @@ jQuery(document).ready(function($) {
 			type: 'POST',
 			data: { action: 'pm_get_option_keys', search: search || '', nonce: pmDBCleaner.nonce },
 			success: function(response) {
-				btn.prop('disabled', false).text('Analyser');
+				btn.prop('disabled', false).text('Analyze');
 				if (response.success && response.data.keys.length > 0) {
 					var total = response.data.total || 0;
 					var shown = response.data.keys.length;
 					var note = total > shown
-						? '<p style="font-size:12px;color:#856404;margin:0 0 8px">⚠️ ' + shown + ' affichées sur ' + total + ' — utilisez le filtre pour affiner.</p>'
+						? '<p style="font-size:12px;color:#856404;margin:0 0 8px">⚠️ ' + shown + ' shown out of ' + total + ' — utilisez le filtre pour affiner.</p>'
 						: '';
 					$('#pm-wpo-keys-list').html(note);
 					$.each(response.data.keys, function(i, key) {
@@ -204,7 +204,7 @@ jQuery(document).ready(function($) {
 				}
 			},
 			error: function() {
-				btn.prop('disabled', false).text('Analyser');
+				btn.prop('disabled', false).text('Analyze');
 				alert(pmDBCleaner.error);
 			}
 		});
@@ -216,7 +216,7 @@ jQuery(document).ready(function($) {
 		pmWpoLoad($('#pm-wpo-filter').val().trim());
 	});
 
-	// Filtre WP Options : recherche côté serveur au bout de 400ms
+	// WP Options filter: server-side search, 400ms debounce
 	var pmWpoTimer;
 	$('#pm-wpo-filter').on('input', function() {
 		clearTimeout(pmWpoTimer);
@@ -226,7 +226,7 @@ jQuery(document).ready(function($) {
 		}
 	});
 
-	// Activation bouton suppression wp_options
+	// Enable delete button for wp_options
 	$(document).on('change', '.pm-wpo-key, #pm-wpo-confirm', function() {
 		var hasChecked = $('.pm-wpo-key:checked').length > 0;
 		var confirmed  = $('#pm-wpo-confirm').is(':checked');
@@ -240,7 +240,7 @@ jQuery(document).ready(function($) {
 		}
 	});
 
-	// Suppression wp_options
+	// Delete wp_options
 	$('#pm-wpo-delete').on('click', function(e) {
 		e.preventDefault();
 		var btn  = $(this);
@@ -248,7 +248,7 @@ jQuery(document).ready(function($) {
 		$('.pm-wpo-key:checked').each(function() { keys.push($(this).val()); });
 
 		if (!keys.length || !$('#pm-wpo-confirm').is(':checked')) return;
-		btn.prop('disabled', true).text('Suppression...');
+		btn.prop('disabled', true).text('Deleting…');
 
 		$.ajax({
 			url: ajaxurl,
@@ -259,15 +259,15 @@ jQuery(document).ready(function($) {
 					$('.pm-wpo-key:checked').closest('label').remove();
 					$('#pm-wpo-confirm').prop('checked', false);
 					$('#pm-wpo-confirm-wrap').hide();
-					btn.prop('disabled', true).text('Supprimer la sélection');
+					btn.prop('disabled', true).text('Delete selection');
 					alert('✅ ' + response.data.message);
 				} else {
-					btn.prop('disabled', false).text('Supprimer la sélection');
+					btn.prop('disabled', false).text('Delete selection');
 					alert(response.data.message || pmDBCleaner.error);
 				}
 			},
 			error: function() {
-				btn.prop('disabled', false).text('Supprimer la sélection');
+				btn.prop('disabled', false).text('Delete selection');
 				alert(pmDBCleaner.error);
 			}
 		});
@@ -278,7 +278,7 @@ jQuery(document).ready(function($) {
 	$('#pm-options-analyze').on('click', function(e) {
 		e.preventDefault();
 		var btn = $(this);
-		btn.prop('disabled', true).text('...');
+		btn.prop('disabled', true).text('…');
 		$('#pm-options-autoload-results').hide();
 
 		$.ajax({
@@ -286,7 +286,7 @@ jQuery(document).ready(function($) {
 			type: 'POST',
 			data: { action: 'pm_analyze_autoload', nonce: pmDBCleaner.nonce },
 			success: function(response) {
-				btn.prop('disabled', false).text('Analyser');
+				btn.prop('disabled', false).text('Analyze');
 				if (response.success) {
 					var d = response.data;
 					$('#pm-options-autoload-size').html(
@@ -321,13 +321,13 @@ jQuery(document).ready(function($) {
 				}
 			},
 			error: function() {
-				btn.prop('disabled', false).text('Analyser');
+				btn.prop('disabled', false).text('Analyze');
 				alert(pmDBCleaner.error);
 			}
 		});
 	});
 
-	// Activation bouton désactiver autoload
+	// Enable disable-autoload button
 	$(document).on('change', '.pm-autoload-key, #pm-autoload-confirm', function() {
 		var hasChecked = $('.pm-autoload-key:checked').length > 0;
 		var confirmed  = $('#pm-autoload-confirm').is(':checked');
@@ -341,7 +341,7 @@ jQuery(document).ready(function($) {
 		}
 	});
 
-	// Désactiver l'autoload
+	// Disable autoload
 	$('#pm-autoload-disable').on('click', function(e) {
 		e.preventDefault();
 		var btn   = $(this);
@@ -349,7 +349,7 @@ jQuery(document).ready(function($) {
 		$('.pm-autoload-key:checked').each(function() { names.push($(this).val()); });
 
 		if (!names.length || !$('#pm-autoload-confirm').is(':checked')) return;
-		btn.prop('disabled', true).text('...');
+		btn.prop('disabled', true).text('…');
 
 		$.ajax({
 			url: ajaxurl,
@@ -362,21 +362,21 @@ jQuery(document).ready(function($) {
 					});
 					$('#pm-autoload-confirm').prop('checked', false);
 					$('#pm-autoload-confirm-wrap').hide();
-					btn.prop('disabled', true).text('Désactiver l\'autoload de la sélection');
+					btn.prop('disabled', true).text('Disable autoload for selection');
 					alert('✅ ' + response.data.message);
 				} else {
-					btn.prop('disabled', false).text('Désactiver l\'autoload de la sélection');
+					btn.prop('disabled', false).text('Disable autoload for selection');
 					alert(response.data.message || pmDBCleaner.error);
 				}
 			},
 			error: function() {
-				btn.prop('disabled', false).text('Désactiver l\'autoload de la sélection');
+				btn.prop('disabled', false).text('Disable autoload for selection');
 				alert(pmDBCleaner.error);
 			}
 		});
 	});
 
-	// ─── Tâches Cron orphelines ───────────────────────────────────────────
+	// ─── Orphan cron tasks ───────────────────────────────────────────────────
 
 	$('#pm-cron-toggle').on('click', function(e) {
 		e.preventDefault();
@@ -405,7 +405,7 @@ jQuery(document).ready(function($) {
 		});
 
 		if (!events.length || !$('#pm-cron-confirm').is(':checked')) return;
-		btn.prop('disabled', true).text('Suppression...');
+		btn.prop('disabled', true).text('Deleting…');
 
 		$.ajax({
 			url: ajaxurl,
@@ -416,19 +416,19 @@ jQuery(document).ready(function($) {
 					$('.pm-cron-key:checked').closest('label').remove();
 					$('#pm-cron-confirm').prop('checked', false);
 					$('#pm-cron-confirm-wrap').hide();
-					btn.prop('disabled', true).text('Supprimer la sélection');
+					btn.prop('disabled', true).text('Delete selection');
 					if ($('#pm-cron-list label').length === 0) {
-						$('#pm-cron-list').html('<p style="font-size:13px;color:#646970;padding:6px">Aucune tâche cron orpheline détectée.</p>');
+						$('#pm-cron-list').html('<p style="font-size:13px;color:#646970;padding:6px">' + pmDBCleaner.noCronOrphans + '</p>');
 					}
 					alert('✅ ' + response.data.message);
 					location.reload();
 				} else {
-					btn.prop('disabled', false).text('Supprimer la sélection');
+					btn.prop('disabled', false).text('Delete selection');
 					alert(response.data.message || pmDBCleaner.error);
 				}
 			},
 			error: function() {
-				btn.prop('disabled', false).text('Supprimer la sélection');
+				btn.prop('disabled', false).text('Delete selection');
 				alert(pmDBCleaner.error);
 			}
 		});
@@ -451,7 +451,7 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 		if (!$('#pm-uninstall-confirm').is(':checked')) return;
 		var btn = $(this);
-		btn.prop('disabled', true).text('Suppression...');
+		btn.prop('disabled', true).text('Deleting…');
 
 		$.ajax({
 			url: ajaxurl,
@@ -459,16 +459,16 @@ jQuery(document).ready(function($) {
 			data: { action: 'pm_uninstall_cron', confirmed: '1', nonce: pmDBCleaner.nonce },
 			success: function(response) {
 				if (response.success) {
-					btn.text('Tâches cron supprimées ✅').prop('disabled', true);
+					btn.text('Cron tasks removed ✅').prop('disabled', true);
 					$('#pm-uninstall-confirm-wrap').hide();
 					alert('✅ ' + response.data.message);
 				} else {
-					btn.prop('disabled', false).text('Supprimer les tâches cron du plugin');
+					btn.prop('disabled', false).text('Remove plugin cron tasks');
 					alert(response.data.message || pmDBCleaner.error);
 				}
 			},
 			error: function() {
-				btn.prop('disabled', false).text('Supprimer les tâches cron du plugin');
+				btn.prop('disabled', false).text('Remove plugin cron tasks');
 				alert(pmDBCleaner.error);
 			}
 		});

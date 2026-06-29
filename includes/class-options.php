@@ -1,7 +1,7 @@
 <?php
 /**
  * PM DB Cleaner — WP Options & Autoload
- * Accès à la table wp_options (lecture, suppression, gestion autoload).
+ * Access to the wp_options table (listing, deletion, autoload management).
  *
  * @package PM_DB_Cleaner
  */
@@ -15,7 +15,7 @@ class PM_DB_Cleaner_Options {
 		if ( ! current_user_can( 'manage_options' ) ) { wp_send_json_error(); }
 	}
 
-	// ─── WP Options : liste des clés ─────────────────────────────────────────
+	// ─── WP Options: list keys ────────────────────────────────────────────────
 
 	public static function ajax_get_option_keys() {
 		self::ajax_check();
@@ -33,29 +33,29 @@ class PM_DB_Cleaner_Options {
 		wp_send_json_success( array( 'keys' => $keys, 'total' => $total ) );
 	}
 
-	// ─── WP Options : suppression ─────────────────────────────────────────────
+	// ─── WP Options: delete selected ─────────────────────────────────────────
 
 	public static function ajax_delete_options() {
 		self::ajax_check();
 		global $wpdb;
 		$keys = isset( $_POST['keys'] ) ? array_map( 'sanitize_text_field', (array) $_POST['keys'] ) : array();
-		if ( empty( $keys ) ) { wp_send_json_error( array( 'message' => 'Aucune option sélectionnée.' ) ); }
-		if ( count( $keys ) > 50 ) { wp_send_json_error( array( 'message' => 'Maximum 50 options par opération.' ) ); }
+		if ( empty( $keys ) ) { wp_send_json_error( array( 'message' => __( 'No option selected.', 'pm-db-cleaner' ) ) ); }
+		if ( count( $keys ) > 50 ) { wp_send_json_error( array( 'message' => __( 'Maximum 50 options per operation.', 'pm-db-cleaner' ) ) ); }
 
 		$deleted = 0; $details = array();
 		foreach ( $keys as $key ) {
 			$result = $wpdb->delete( $wpdb->options, array( 'option_name' => $key ), array( '%s' ) );
 			if ( $result ) { $deleted++; $details[] = $key; }
 		}
-		if ( $deleted > 0 ) { PM_DB_Cleaner_Logger::log( 'wp_options', $deleted, 0, 'MANUEL' ); }
+		if ( $deleted > 0 ) { PM_DB_Cleaner_Logger::log( 'wp_options', $deleted, 0, 'MANUAL' ); }
 		wp_send_json_success( array(
 			'message' => $deleted > 0
-				? sprintf( '%d option(s) supprimée(s) : %s', $deleted, implode( ', ', $details ) )
-				: 'Aucune option trouvée.',
+				? sprintf( __( '%d option(s) deleted: %s', 'pm-db-cleaner' ), $deleted, implode( ', ', $details ) )
+				: __( 'No option found.', 'pm-db-cleaner' ),
 		) );
 	}
 
-	// ─── Autoload : analyse ───────────────────────────────────────────────────
+	// ─── Autoload: analyze ────────────────────────────────────────────────────
 
 	public static function ajax_analyze_autoload() {
 		self::ajax_check();
@@ -75,9 +75,9 @@ class PM_DB_Cleaner_Options {
 		}
 		$size_kb    = round( $size_bytes / 1024, 1 );
 		$size_label = $size_kb >= 1024 ? round( $size_kb / 1024, 2 ) . ' MB' : $size_kb . ' KB';
-		if ( $size_kb < 300 )     { $status = 'Normal';       $color = '#1e8c3b'; $bg = '#edfaef'; }
-		elseif ( $size_kb < 800 ) { $status = 'À surveiller'; $color = '#856404'; $bg = '#fff3cd'; }
-		else                      { $status = 'Surchargé';    $color = '#dc3232'; $bg = '#fef0f0'; }
+		if ( $size_kb < 300 )     { $status = __( 'Normal', 'pm-db-cleaner' );      $color = '#1e8c3b'; $bg = '#edfaef'; }
+		elseif ( $size_kb < 800 ) { $status = __( 'Monitor', 'pm-db-cleaner' );     $color = '#856404'; $bg = '#fff3cd'; }
+		else                      { $status = __( 'Overloaded', 'pm-db-cleaner' );  $color = '#dc3232'; $bg = '#fef0f0'; }
 		wp_send_json_success( array(
 			'size_kb' => $size_kb, 'size_label' => $size_label,
 			'count' => number_format_i18n( $count ), 'top10' => $top10,
@@ -85,22 +85,22 @@ class PM_DB_Cleaner_Options {
 		) );
 	}
 
-	// ─── Autoload : désactivation ─────────────────────────────────────────────
+	// ─── Autoload: disable ────────────────────────────────────────────────────
 
 	public static function ajax_disable_autoload() {
 		self::ajax_check();
 		global $wpdb;
 		$names = isset( $_POST['option_names'] ) ? array_filter( array_map( 'sanitize_text_field', (array) $_POST['option_names'] ) ) : array();
-		if ( empty( $names ) ) { wp_send_json_error( array( 'message' => 'Aucune option sélectionnée.' ) ); }
-		if ( count( $names ) > 15 ) { wp_send_json_error( array( 'message' => 'Maximum 15 options par opération.' ) ); }
+		if ( empty( $names ) ) { wp_send_json_error( array( 'message' => __( 'No option selected.', 'pm-db-cleaner' ) ) ); }
+		if ( count( $names ) > 15 ) { wp_send_json_error( array( 'message' => __( 'Maximum 15 options per operation.', 'pm-db-cleaner' ) ) ); }
 		$updated = 0; $details = array();
 		foreach ( $names as $name ) {
 			$r = $wpdb->update( $wpdb->options, array( 'autoload' => 'no' ), array( 'option_name' => $name ), array( '%s' ), array( '%s' ) );
 			if ( $r !== false ) { $updated++; $details[] = $name; }
 		}
-		if ( $updated > 0 ) { PM_DB_Cleaner_Logger::log( 'wp_options_autoload', $updated, 0, 'MANUEL' ); }
+		if ( $updated > 0 ) { PM_DB_Cleaner_Logger::log( 'wp_options_autoload', $updated, 0, 'MANUAL' ); }
 		wp_send_json_success( array(
-			'message' => sprintf( 'Autoload désactivé pour %d option(s) : %s', $updated, implode( ', ', $details ) ),
+			'message' => sprintf( __( 'Autoload disabled for %d option(s): %s', 'pm-db-cleaner' ), $updated, implode( ', ', $details ) ),
 		) );
 	}
 
