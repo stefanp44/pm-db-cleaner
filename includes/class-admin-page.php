@@ -33,7 +33,6 @@ class PM_DB_Cleaner_Admin {
 			'confirmAll'   => __( 'Clean all items? This may take a while.', 'pm-db-cleaner' ),
 			'noCronOrphans'=> __( 'No orphan cron tasks detected.', 'pm-db-cleaner' ),
 			'btnClean'     => __( 'Clean', 'pm-db-cleaner' ),
-			'btnCleanAll'  => __( 'Clean everything now', 'pm-db-cleaner' ),
 		) );
 	}
 
@@ -154,11 +153,7 @@ class PM_DB_Cleaner_Admin {
 							<p class="pm-log-dl"><a href="<?php echo esc_url( PM_DB_Cleaner_Logger::get_log_url() ); ?>" download class="pm-log-dl-link">📥 <?php esc_html_e( 'Download full log file', 'pm-db-cleaner' ); ?></a></p>
 						</div>
 						<?php endif; ?>
-						<div class="pm-cleanup-all-wrap">
-							<button id="pm-cleanup-all" class="pm-btn pm-btn-all">
-								<span class="dashicons dashicons-database"></span> <?php esc_html_e( 'Clean everything now', 'pm-db-cleaner' ); ?>
-							</button>
-						</div>
+
 					</div>
 				</details>
 				<div class="pm-header-branding">

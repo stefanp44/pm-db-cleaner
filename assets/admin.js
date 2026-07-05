@@ -43,32 +43,6 @@ jQuery(document).ready(function($) {
 
 	// ─── Tout nettoyer ───────────────────────────────────────────────────
 
-	$('#pm-cleanup-all').on('click', function(e) {
-		e.preventDefault();
-		if (!confirm(pmDBCleaner.confirmAll || 'Clean all items? This may take a while.')) return;
-
-		var btn = $(this);
-		btn.prop('disabled', true).html('<span class="dashicons dashicons-update spin"></span> ' + pmDBCleaner.processing);
-
-		$.ajax({
-			url: ajaxurl,
-			type: 'POST',
-			data: { action: 'pm_cleanup_all', nonce: pmDBCleaner.nonce },
-			success: function(response) {
-				if (response.success) {
-					location.reload();
-				} else {
-					btn.prop('disabled', false).html('<span class="dashicons dashicons-database"></span> Clean all');
-					alert(pmDBCleaner.error);
-				}
-			},
-			error: function() {
-				btn.prop('disabled', false).html('<span class="dashicons dashicons-database"></span> Clean all');
-				alert(pmDBCleaner.error);
-			}
-		});
-	});
-
 	// ─── Métadonnées (postmeta) ───────────────────────────────────────────
 
 	$('#pm-cf-analyze').on('click', function(e) {

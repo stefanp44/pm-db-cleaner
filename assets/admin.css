@@ -43,9 +43,6 @@
 .pm-btn{background:#289dcc;color:#fff;border:none;padding:6px 16px;font-size:13px;cursor:pointer;border-radius:3px;white-space:nowrap;transition:all 0.2s}
 .pm-btn:hover{background:#B11F8F}
 .pm-btn:disabled{background:#dcdcde;cursor:not-allowed;color:#a7aaad}
-.pm-btn-all{background:#289dcc;padding:10px 24px;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
-.pm-btn-all:hover{background:#B11F8F}
-.pm-btn-all .dashicons{font-size:18px;width:18px;height:18px}
 .pm-btn-danger{background:#B11F8F;color:#fff}
 .pm-btn-danger:hover{background:#289dcc}
 .pm-btn-danger:disabled{background:#dcdcde;color:#a7aaad;cursor:not-allowed}

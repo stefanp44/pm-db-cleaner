@@ -5,6 +5,29 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [2.3] — 2026-07-05
+
+### Changed
+
+- "Clean everything now" button removed from the "Scheduled automatic cleanup" block — the log download link is the only remaining element in that section.
+
+## [2.2] — 2026-07-05
+
+### Changed
+
+- Danger Zone block converted to a collapsible `<details>` toggle, closed by default — same pattern as the "Scheduled automatic cleanup" block. Reduces visual noise on first load.
+- Danger Zone background changed to a light red (`#fef0f0`) with a matching border (`#f5c6c6`), consistent with the green used for the safe cleanup section.
+- `⚠️` emoji in the Danger Zone header replaced by `dashicons-warning` in red, consistent with the dashicon usage elsewhere in the interface.
+- `⚠️` emoji removed from the WP Options overflow notice ("N shown out of X"). Remaining French text in that message also corrected to English.
+
+## [2.1] — 2026-07-05
+
+### Changed
+
+- The four manual operation panels (Metadata/postmeta, WP Options, Orphan cron tasks, Deleting via SFTP/SSH) are now grouped inside a **Danger Zone** block, visually distinct from the safe cleanup sections above. The block features a red border, a warning header and an explicit description of the risks involved.
+- The individual warning notice previously displayed inside the WP Options panel removed — replaced by the global Danger Zone header.
+- Two new i18n strings added (`Danger Zone — manual operations` and its description). French translation updated accordingly.
+
 ## [2.0] — 2026-06-29
 
 ### Changed
@@ -29,7 +52,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Main file `pm-db-cleaner.php` now acts as bootstrap only: constants, includes, activation/deactivation hooks and WordPress action registration.
 - Added constants `PM_DB_CLEANER_VERSION` and `PM_DB_CLEANER_FILE` used by includes for path and version references.
 
-### Features
+### Note
 
 No functional changes — this release is a pure internal restructuring.
 
@@ -73,24 +96,17 @@ No functional changes — this release is a pure internal restructuring.
 - "Before removing this plugin" section renamed to "Deleting the plugin via SFTP/SSH?" with updated copy clarifying that normal WordPress deactivation is sufficient, and the manual button only applies to direct SFTP/SSH file deletion.
 - Plugin Update Checker configuration moved to a separate `update-checker-config.php` file (excluded from git via `.gitignore` while the repository was private).
 
-## [2026-06-13] (3)
-
-### Added
-
-- "Before removing this plugin" section: manual uninstall button that removes the 3 PM DB Cleaner recurring cron tasks via `wp_clear_scheduled_hook()`. Required as the plugin was a mu-plugin with no WordPress uninstall hook.
-
-## [2026-06-13] (2)
-
-### Fixed
-
-- Cron task times (scheduled cleanups and orphan tasks) corrected: replaced `date_i18n()` with `get_date_from_gmt()` for UTC → site local time conversion, correctly handling DST. A 2-hour offset was visible on BackWPup tasks compared to WP Crontrol.
-
 ## [2026-06-13]
 
 ### Added
 
 - New "Orphan cron tasks" section: detects scheduled hooks with no registered callback (`has_action()` empty), typically leftovers from an uninstalled plugin. Detection runs at admin page load (not via `admin-ajax.php`) to match WP Crontrol's execution context and avoid false positives from plugins that register their callback only via `admin_menu` (observed with SureMail). Manual deletion only, with mandatory explicit confirmation, re-verified server-side. Limit of 50 tasks per operation.
 - Core hook `wp_delete_temp_updater_backups` added to the list of hooks never considered orphaned.
+- "Before removing this plugin" section: manual uninstall button that removes the 3 PM DB Cleaner recurring cron tasks via `wp_clear_scheduled_hook()`.
+
+### Fixed
+
+- Cron task times (scheduled cleanups and orphan tasks) corrected: replaced `date_i18n()` with `get_date_from_gmt()` for UTC → site local time conversion, correctly handling DST. A 2-hour offset was visible on BackWPup tasks compared to WP Crontrol.
 
 ### Changed
 
@@ -100,20 +116,3 @@ No functional changes — this release is a pure internal restructuring.
 ## [2026-06-09]
 
 Reference version v6, deployment in progress on pilot sites.
-
-## [2.1] — 2026-07-05
-
-### Changed
-
-- The four manual operation panels (Metadata/postmeta, WP Options, Orphan cron tasks, Deleting via SFTP/SSH) are now grouped inside a **Danger Zone** block, visually distinct from the safe cleanup sections above. The block features a red border, a warning header and an explicit description of the risks involved.
-- The individual warning notice previously displayed inside the WP Options panel removed — replaced by the global Danger Zone header.
-- Two new i18n strings added (`Danger Zone — manual operations` and its description). French translation updated accordingly.
-
-## [2.2] — 2026-07-05
-
-### Changed
-
-- Danger Zone block converted to a collapsible `<details>` toggle, closed by default — same pattern as the "Scheduled automatic cleanup" block. Reduces visual noise on first load.
-- Danger Zone background changed to a light red (`#fef0f0`) with a matching border (`#f5c6c6`), consistent with the green used for the safe cleanup section.
-- `⚠️` emoji in the Danger Zone header replaced by `dashicons-warning` in red, consistent with the dashicon usage elsewhere in the interface.
-- `⚠️` emoji removed from the WP Options overflow notice ("N shown out of X"). Remaining French text in that message also corrected to English.
