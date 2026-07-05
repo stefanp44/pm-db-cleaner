@@ -120,6 +120,15 @@
 .pm-autoload-stat strong{color:#289dcc;font-size:16px;display:block}
 .pm-keys-wrap--short{max-height:220px}
 
+/* ─── Danger Zone ────────────────────────────────────────────────────────── */
+.pm-danger-zone{border:2px solid #dc3232;border-radius:8px;padding:20px;margin-bottom:15px;background:#fff}
+.pm-danger-zone-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #f5c6c6}
+.pm-danger-zone-icon{font-size:28px;line-height:1;flex-shrink:0;margin-top:2px}
+.pm-danger-zone-title{font-size:16px;font-weight:700;color:#dc3232;margin:0 0 6px}
+.pm-danger-zone-desc{font-size:13px;color:#646970;margin:0;line-height:1.5}
+.pm-danger-zone .pm-two-col{margin-bottom:15px}
+.pm-danger-zone .pm-two-col:last-child{margin-bottom:0}
+
 /* ─── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width:1200px){
 .pm-header-grid{grid-template-columns:1fr;gap:15px}

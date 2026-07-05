@@ -292,119 +292,125 @@ class PM_DB_Cleaner_Admin {
 
 			</div><!-- .pm-main-grid -->
 
-			<!-- ── Bottom: Metadata (postmeta) + WP Options ── -->
-			<div class="pm-two-col">
-
-				<!-- Metadata (postmeta) -->
-				<div class="pm-pane">
-					<div class="pm-pane-title">
-						<?php esc_html_e( 'Metadata (postmeta)', 'pm-db-cleaner' ); ?>
-						<button id="pm-cf-analyze" class="pm-btn" style="float:right"><?php esc_html_e( 'Analyze', 'pm-db-cleaner' ); ?></button>
-					</div>
-					<div class="pm-cf-wrap">
-						<div class="pm-cf-radio-group">
-							<label><input type="radio" name="pm_cf_type" value="post" checked> <?php esc_html_e( 'Posts', 'pm-db-cleaner' ); ?></label>
-							<label><input type="radio" name="pm_cf_type" value="term"> <?php esc_html_e( 'Terms', 'pm-db-cleaner' ); ?></label>
-							<label><input type="radio" name="pm_cf_type" value="user"> <?php esc_html_e( 'Users', 'pm-db-cleaner' ); ?></label>
-							<label><input type="radio" name="pm_cf_type" value="all"> <?php esc_html_e( 'All', 'pm-db-cleaner' ); ?></label>
-						</div>
-						<div id="pm-cf-results" style="display:none">
-							<input type="text" id="pm-cf-filter" class="pm-filter-input" placeholder="<?php esc_attr_e( 'Filter keys…', 'pm-db-cleaner' ); ?>">
-							<div class="pm-keys-wrap"><div id="pm-cf-keys-list"></div></div>
-							<div id="pm-cf-confirm-wrap" class="pm-confirm-box" style="display:none">
-								<label>
-									<input type="checkbox" id="pm-cf-confirm">
-									<span><strong>⚠️ <?php esc_html_e( 'Mandatory confirmation:', 'pm-db-cleaner' ); ?></strong> <?php esc_html_e( 'I have made a full database backup. Deletion is permanent and irreversible.', 'pm-db-cleaner' ); ?></span>
-								</label>
-							</div>
-							<button id="pm-cf-delete" class="pm-btn pm-btn-danger" disabled><?php esc_html_e( 'Delete selection', 'pm-db-cleaner' ); ?></button>
-						</div>
+			<!-- ── Danger Zone ── -->
+			<div class="pm-danger-zone">
+				<div class="pm-danger-zone-header">
+					<span class="pm-danger-zone-icon">⚠️</span>
+					<div>
+						<div class="pm-danger-zone-title"><?php esc_html_e( 'Danger Zone — manual operations', 'pm-db-cleaner' ); ?></div>
+						<p class="pm-danger-zone-desc"><?php esc_html_e( 'Unlike the automatic cleanups above, the following operations rely on your own selection. A wrong action can damage the site irreversibly. Only proceed after making a full database backup and if you know exactly what you are deleting.', 'pm-db-cleaner' ); ?></p>
 					</div>
 				</div>
 
-				<!-- WP Options -->
-				<div class="pm-pane">
-					<div class="pm-pane-title">
-						<?php esc_html_e( 'WP Options', 'pm-db-cleaner' ); ?>
-						<button id="pm-wpo-analyze" class="pm-btn" style="float:right"><?php esc_html_e( 'Analyze', 'pm-db-cleaner' ); ?></button>
+				<div class="pm-two-col">
+
+					<!-- Metadata (postmeta) -->
+					<div class="pm-pane">
+						<div class="pm-pane-title">
+							<?php esc_html_e( 'Metadata (postmeta)', 'pm-db-cleaner' ); ?>
+							<button id="pm-cf-analyze" class="pm-btn" style="float:right"><?php esc_html_e( 'Analyze', 'pm-db-cleaner' ); ?></button>
+						</div>
+						<div class="pm-cf-wrap">
+							<div class="pm-cf-radio-group">
+								<label><input type="radio" name="pm_cf_type" value="post" checked> <?php esc_html_e( 'Posts', 'pm-db-cleaner' ); ?></label>
+								<label><input type="radio" name="pm_cf_type" value="term"> <?php esc_html_e( 'Terms', 'pm-db-cleaner' ); ?></label>
+								<label><input type="radio" name="pm_cf_type" value="user"> <?php esc_html_e( 'Users', 'pm-db-cleaner' ); ?></label>
+								<label><input type="radio" name="pm_cf_type" value="all"> <?php esc_html_e( 'All', 'pm-db-cleaner' ); ?></label>
+							</div>
+							<div id="pm-cf-results" style="display:none">
+								<input type="text" id="pm-cf-filter" class="pm-filter-input" placeholder="<?php esc_attr_e( 'Filter keys…', 'pm-db-cleaner' ); ?>">
+								<div class="pm-keys-wrap"><div id="pm-cf-keys-list"></div></div>
+								<div id="pm-cf-confirm-wrap" class="pm-confirm-box" style="display:none">
+									<label>
+										<input type="checkbox" id="pm-cf-confirm">
+										<span><strong>⚠️ <?php esc_html_e( 'Mandatory confirmation:', 'pm-db-cleaner' ); ?></strong> <?php esc_html_e( 'I have made a full database backup. Deletion is permanent and irreversible.', 'pm-db-cleaner' ); ?></span>
+									</label>
+								</div>
+								<button id="pm-cf-delete" class="pm-btn pm-btn-danger" disabled><?php esc_html_e( 'Delete selection', 'pm-db-cleaner' ); ?></button>
+							</div>
+						</div>
 					</div>
-					<p class="pm-notice pm-notice--danger">
-						<strong>⚠️ <?php esc_html_e( 'High-risk area — use at your own risk.', 'pm-db-cleaner' ); ?></strong><br>
-						<?php esc_html_e( 'The wp_options table holds critical data for WordPress and your plugins. Deleting the wrong option can break the site. Only act here if you know exactly what you are deleting and have made a backup first.', 'pm-db-cleaner' ); ?>
-					</p>
-					<div id="pm-wpo-results" style="display:none">
-						<input type="text" id="pm-wpo-filter" class="pm-filter-input" placeholder="<?php esc_attr_e( 'Filter options…', 'pm-db-cleaner' ); ?>">
-						<div class="pm-keys-wrap"><div id="pm-wpo-keys-list"></div></div>
-						<div id="pm-wpo-confirm-wrap" class="pm-confirm-box pm-confirm-box-danger" style="display:none">
+
+					<!-- WP Options -->
+					<div class="pm-pane">
+						<div class="pm-pane-title">
+							<?php esc_html_e( 'WP Options', 'pm-db-cleaner' ); ?>
+							<button id="pm-wpo-analyze" class="pm-btn" style="float:right"><?php esc_html_e( 'Analyze', 'pm-db-cleaner' ); ?></button>
+						</div>
+						<div id="pm-wpo-results" style="display:none">
+							<input type="text" id="pm-wpo-filter" class="pm-filter-input" placeholder="<?php esc_attr_e( 'Filter options…', 'pm-db-cleaner' ); ?>">
+							<div class="pm-keys-wrap"><div id="pm-wpo-keys-list"></div></div>
+							<div id="pm-wpo-confirm-wrap" class="pm-confirm-box pm-confirm-box-danger" style="display:none">
+								<label>
+									<input type="checkbox" id="pm-wpo-confirm">
+									<span><strong>⚠️ <?php esc_html_e( 'Mandatory confirmation:', 'pm-db-cleaner' ); ?></strong> <?php esc_html_e( 'I have made a full database backup. I know exactly what I am deleting and accept the risks. Deletion is permanent and irreversible.', 'pm-db-cleaner' ); ?></span>
+								</label>
+							</div>
+							<button id="pm-wpo-delete" class="pm-btn pm-btn-danger" disabled><?php esc_html_e( 'Delete selection', 'pm-db-cleaner' ); ?></button>
+						</div>
+					</div>
+
+				</div><!-- .pm-two-col -->
+
+				<div class="pm-two-col">
+
+					<!-- Orphan cron tasks -->
+					<div class="pm-pane">
+						<div class="pm-pane-title">
+							<?php esc_html_e( 'Orphan cron tasks', 'pm-db-cleaner' ); ?>
+							<button id="pm-cron-toggle" class="pm-btn" style="float:right">
+								<?php printf( esc_html__( '%d detected — show', 'pm-db-cleaner' ), count( $cron_orphans ) ); ?>
+							</button>
+						</div>
+						<p class="pm-pane-desc">
+							<?php esc_html_e( 'Scheduled hooks with no registered callback (has_action() empty) — leftovers from an uninstalled plugin. Detection runs at page load (like WP Crontrol) to avoid false positives.', 'pm-db-cleaner' ); ?>
+						</p>
+						<div id="pm-cron-results" style="display:none;margin-top:12px">
+							<?php if ( empty( $cron_orphans ) ) : ?>
+								<p class="pm-pane-desc"><?php esc_html_e( 'No orphan cron tasks detected.', 'pm-db-cleaner' ); ?></p>
+							<?php else : ?>
+								<div class="pm-keys-wrap">
+									<div id="pm-cron-list">
+										<?php foreach ( $cron_orphans as $o ) : ?>
+										<label class="pm-key-label">
+											<input type="checkbox" class="pm-cron-key" data-hook="<?php echo esc_attr( $o['hook'] ); ?>" data-timestamp="<?php echo esc_attr( $o['timestamp'] ); ?>">
+											<span><?php echo esc_html( $o['hook'] ); ?></span>
+											<span class="pm-key-size"><?php echo esc_html( $o['recurrence'] ); ?> — <?php esc_html_e( 'next:', 'pm-db-cleaner' ); ?> <?php echo esc_html( $o['next_run'] ); ?></span>
+										</label>
+										<?php endforeach; ?>
+									</div>
+								</div>
+								<div id="pm-cron-confirm-wrap" class="pm-confirm-box" style="display:none">
+									<label>
+										<input type="checkbox" id="pm-cron-confirm">
+										<span><strong>⚠️ <?php esc_html_e( 'Mandatory confirmation:', 'pm-db-cleaner' ); ?></strong> <?php esc_html_e( 'I know that the plugin(s) behind these tasks are no longer used on this site.', 'pm-db-cleaner' ); ?></span>
+									</label>
+								</div>
+								<button id="pm-cron-delete" class="pm-btn pm-btn-danger" disabled><?php esc_html_e( 'Delete selection', 'pm-db-cleaner' ); ?></button>
+							<?php endif; ?>
+						</div>
+					</div>
+
+					<!-- Manual uninstall SFTP/SSH -->
+					<div class="pm-pane">
+						<div class="pm-pane-title pm-pane-title--danger"><?php esc_html_e( 'Deleting the plugin via SFTP/SSH?', 'pm-db-cleaner' ); ?></div>
+						<p class="pm-pane-desc">
+							<strong><?php esc_html_e( 'Deactivating via Plugins > Deactivate', 'pm-db-cleaner' ); ?></strong> → <?php esc_html_e( 'the 3 cron tasks are removed automatically. Nothing to do here.', 'pm-db-cleaner' ); ?><br><br>
+							<strong><?php esc_html_e( 'Deleting the file directly via SFTP/SSH', 'pm-db-cleaner' ); ?></strong> <?php esc_html_e( 'without deactivating through WordPress → click below', 'pm-db-cleaner' ); ?> <strong><?php esc_html_e( 'before', 'pm-db-cleaner' ); ?></strong> <?php esc_html_e( 'deleting the file to prevent these tasks remaining scheduled indefinitely.', 'pm-db-cleaner' ); ?>
+						</p>
+						<div id="pm-uninstall-confirm-wrap" class="pm-confirm-box" style="display:none">
 							<label>
-								<input type="checkbox" id="pm-wpo-confirm">
-								<span><strong>⚠️ <?php esc_html_e( 'Mandatory confirmation:', 'pm-db-cleaner' ); ?></strong> <?php esc_html_e( 'I have made a full database backup. I know exactly what I am deleting and accept the risks. Deletion is permanent and irreversible.', 'pm-db-cleaner' ); ?></span>
+								<input type="checkbox" id="pm-uninstall-confirm">
+								<span><?php esc_html_e( 'I am about to delete the plugin file via SFTP/SSH — remove its 3 scheduled cron tasks', 'pm-db-cleaner' ); ?> (<code>pm_cleanup_action_scheduler_daily</code>, <code>pm_cleanup_database_weekly</code>, <code>pm_cleanup_monthly</code>).</span>
 							</label>
 						</div>
-						<button id="pm-wpo-delete" class="pm-btn pm-btn-danger" disabled><?php esc_html_e( 'Delete selection', 'pm-db-cleaner' ); ?></button>
+						<button id="pm-uninstall-toggle" class="pm-btn"><?php esc_html_e( 'Prepare manual deletion', 'pm-db-cleaner' ); ?></button>
+						<button id="pm-uninstall-confirm-btn" class="pm-btn pm-btn-danger" style="display:none" disabled><?php esc_html_e( 'Remove plugin cron tasks', 'pm-db-cleaner' ); ?></button>
 					</div>
-				</div>
 
-			</div><!-- .pm-two-col -->
+				</div><!-- .pm-two-col -->
 
-			<!-- ── Bottom: Orphan cron tasks + SFTP ── -->
-			<div class="pm-two-col">
-
-				<!-- Orphan cron tasks -->
-				<div class="pm-pane">
-					<div class="pm-pane-title">
-						<?php esc_html_e( 'Orphan cron tasks', 'pm-db-cleaner' ); ?>
-						<button id="pm-cron-toggle" class="pm-btn" style="float:right">
-							<?php printf( esc_html__( '%d detected — show', 'pm-db-cleaner' ), count( $cron_orphans ) ); ?>
-						</button>
-					</div>
-					<p class="pm-pane-desc">
-						<?php esc_html_e( 'Scheduled hooks with no registered callback (has_action() empty) — leftovers from an uninstalled plugin. Detection runs at page load (like WP Crontrol) to avoid false positives.', 'pm-db-cleaner' ); ?>
-					</p>
-					<div id="pm-cron-results" style="display:none;margin-top:12px">
-						<?php if ( empty( $cron_orphans ) ) : ?>
-							<p class="pm-pane-desc"><?php esc_html_e( 'No orphan cron tasks detected.', 'pm-db-cleaner' ); ?></p>
-						<?php else : ?>
-							<div class="pm-keys-wrap">
-								<div id="pm-cron-list">
-									<?php foreach ( $cron_orphans as $o ) : ?>
-									<label class="pm-key-label">
-										<input type="checkbox" class="pm-cron-key" data-hook="<?php echo esc_attr( $o['hook'] ); ?>" data-timestamp="<?php echo esc_attr( $o['timestamp'] ); ?>">
-										<span><?php echo esc_html( $o['hook'] ); ?></span>
-										<span class="pm-key-size"><?php echo esc_html( $o['recurrence'] ); ?> — <?php esc_html_e( 'next:', 'pm-db-cleaner' ); ?> <?php echo esc_html( $o['next_run'] ); ?></span>
-									</label>
-									<?php endforeach; ?>
-								</div>
-							</div>
-							<div id="pm-cron-confirm-wrap" class="pm-confirm-box" style="display:none">
-								<label>
-									<input type="checkbox" id="pm-cron-confirm">
-									<span><strong>⚠️ <?php esc_html_e( 'Mandatory confirmation:', 'pm-db-cleaner' ); ?></strong> <?php esc_html_e( 'I know that the plugin(s) behind these tasks are no longer used on this site.', 'pm-db-cleaner' ); ?></span>
-								</label>
-							</div>
-							<button id="pm-cron-delete" class="pm-btn pm-btn-danger" disabled><?php esc_html_e( 'Delete selection', 'pm-db-cleaner' ); ?></button>
-						<?php endif; ?>
-					</div>
-				</div>
-
-				<!-- Manual uninstall SFTP/SSH -->
-				<div class="pm-pane">
-					<div class="pm-pane-title pm-pane-title--danger"><?php esc_html_e( 'Deleting the plugin via SFTP/SSH?', 'pm-db-cleaner' ); ?></div>
-					<p class="pm-pane-desc">
-						<strong><?php esc_html_e( 'Deactivating via Plugins > Deactivate', 'pm-db-cleaner' ); ?></strong> → <?php esc_html_e( 'the 3 cron tasks are removed automatically. Nothing to do here.', 'pm-db-cleaner' ); ?><br><br>
-						<strong><?php esc_html_e( 'Deleting the file directly via SFTP/SSH', 'pm-db-cleaner' ); ?></strong> <?php esc_html_e( 'without deactivating through WordPress → click below', 'pm-db-cleaner' ); ?> <strong><?php esc_html_e( 'before', 'pm-db-cleaner' ); ?></strong> <?php esc_html_e( 'deleting the file to prevent these tasks remaining scheduled indefinitely.', 'pm-db-cleaner' ); ?>
-					</p>
-					<div id="pm-uninstall-confirm-wrap" class="pm-confirm-box" style="display:none">
-						<label>
-							<input type="checkbox" id="pm-uninstall-confirm">
-							<span><?php esc_html_e( 'I am about to delete the plugin file via SFTP/SSH — remove its 3 scheduled cron tasks', 'pm-db-cleaner' ); ?> (<code>pm_cleanup_action_scheduler_daily</code>, <code>pm_cleanup_database_weekly</code>, <code>pm_cleanup_monthly</code>).</span>
-						</label>
-					</div>
-					<button id="pm-uninstall-toggle" class="pm-btn"><?php esc_html_e( 'Prepare manual deletion', 'pm-db-cleaner' ); ?></button>
-					<button id="pm-uninstall-confirm-btn" class="pm-btn pm-btn-danger" style="display:none" disabled><?php esc_html_e( 'Remove plugin cron tasks', 'pm-db-cleaner' ); ?></button>
-				</div>
-
-			</div><!-- .pm-two-col -->
+			</div><!-- .pm-danger-zone -->
 
 		</div><!-- .pm-db-cleaner-wrap -->
 		<?php
