@@ -5,7 +5,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
-## [2.3] — 2026-07-05
+## [2.3.1] — 2026-07-05
 
 ### Changed
 
