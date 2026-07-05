@@ -2,7 +2,7 @@
 /**
  * Plugin Name: PM DB Cleaner
  * Description: Automatically cleans the WordPress database: orphaned and duplicated metadata, oEmbed caches, trashed comments, expired transients, Action Scheduler, orphaned WooCommerce variations, unused custom fields, wp_options entries and autoload, and orphaned cron tasks. Scheduled daily/weekly/monthly cleanups with traceable logs and timeout prevention.
- * Version: 2.3.1
+ * Version: 2.3
  * Author: Perspectives Marketing
  * Author URI: https://perspectives.marketing
  * Update URI: https://github.com/stefanp44/pm-db-cleaner
