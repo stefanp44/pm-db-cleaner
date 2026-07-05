@@ -293,14 +293,13 @@ class PM_DB_Cleaner_Admin {
 			</div><!-- .pm-main-grid -->
 
 			<!-- ── Danger Zone ── -->
-			<div class="pm-danger-zone">
-				<div class="pm-danger-zone-header">
-					<span class="pm-danger-zone-icon">⚠️</span>
-					<div>
-						<div class="pm-danger-zone-title"><?php esc_html_e( 'Danger Zone — manual operations', 'pm-db-cleaner' ); ?></div>
-						<p class="pm-danger-zone-desc"><?php esc_html_e( 'Unlike the automatic cleanups above, the following operations rely on your own selection. A wrong action can damage the site irreversibly. Only proceed after making a full database backup and if you know exactly what you are deleting.', 'pm-db-cleaner' ); ?></p>
-					</div>
-				</div>
+			<details class="pm-danger-zone">
+				<summary>
+					<span class="dashicons dashicons-warning"></span>
+					<strong><?php esc_html_e( 'Danger Zone — manual operations', 'pm-db-cleaner' ); ?></strong>
+				</summary>
+				<div class="pm-danger-zone-content">
+				<p class="pm-danger-zone-desc" style="padding-top:12px"><?php esc_html_e( 'Unlike the automatic cleanups above, the following operations rely on your own selection. A wrong action can damage the site irreversibly. Only proceed after making a full database backup and if you know exactly what you are deleting.', 'pm-db-cleaner' ); ?></p>
 
 				<div class="pm-two-col">
 
@@ -410,7 +409,8 @@ class PM_DB_Cleaner_Admin {
 
 				</div><!-- .pm-two-col -->
 
-			</div><!-- .pm-danger-zone -->
+				</div><!-- .pm-danger-zone-content -->
+			</details><!-- .pm-danger-zone -->
 
 		</div><!-- .pm-db-cleaner-wrap -->
 		<?php

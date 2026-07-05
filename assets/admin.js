@@ -186,7 +186,7 @@ jQuery(document).ready(function($) {
 					var total = response.data.total || 0;
 					var shown = response.data.keys.length;
 					var note = total > shown
-						? '<p style="font-size:12px;color:#856404;margin:0 0 8px">⚠️ ' + shown + ' shown out of ' + total + ' — utilisez le filtre pour affiner.</p>'
+						? '<p style="font-size:12px;color:#856404;margin:0 0 8px">' + shown + ' shown out of ' + total + ' — use the filter to narrow down.</p>'
 						: '';
 					$('#pm-wpo-keys-list').html(note);
 					$.each(response.data.keys, function(i, key) {
