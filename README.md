@@ -16,6 +16,8 @@ WordPress plugin for automatic and manual database cleanup. Developed by [Perspe
 
 ### Manual cleanups
 
+> ⚠️ **Danger Zone** — the four panels below are grouped in a dedicated danger zone in the interface. Unlike automatic cleanups, these operations rely on your own selection. A wrong action can damage the site irreversibly.
+
 - **Metadata (postmeta)** — list meta keys with filter, selection and deletion by table (posts, terms, users)
 - **WP Options** — full access to the `wp_options` table with filter and deletion (high-risk area, explicit warning)
 - **Autoload** — analyze total autoloaded size, top 10 heaviest options, selective autoload disabling

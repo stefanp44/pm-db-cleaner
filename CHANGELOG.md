@@ -100,3 +100,11 @@ No functional changes — this release is a pure internal restructuring.
 ## [2026-06-09]
 
 Reference version v6, deployment in progress on pilot sites.
+
+## [2.1] — 2026-07-05
+
+### Changed
+
+- The four manual operation panels (Metadata/postmeta, WP Options, Orphan cron tasks, Deleting via SFTP/SSH) are now grouped inside a **Danger Zone** block, visually distinct from the safe cleanup sections above. The block features a red border, a warning header and an explicit description of the risks involved.
+- The individual warning notice previously displayed inside the WP Options panel removed — replaced by the global Danger Zone header.
+- Two new i18n strings added (`Danger Zone — manual operations` and its description). French translation updated accordingly.
